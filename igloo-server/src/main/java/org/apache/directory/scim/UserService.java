@@ -36,8 +36,16 @@ public class UserService
 
     @GET
     @Produces( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    
     public User getUser( @PathParam("user") String userId )
     {
         return null;
+    }
+    
+    @PATCH
+    @Consumes( {MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON} )
+    public User patchUser( @PathParam("user") String userId )
+    {
+      return null;
     }
 }

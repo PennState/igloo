@@ -25,7 +25,6 @@
   </parent>
   <artifactId>igloo-server</artifactId>
   <packaging>war</packaging>
-  <version>1.0-SNAPSHOT</version>
   <name>eSCIMo server</name>
 
   <dependencies>
