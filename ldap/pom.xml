@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>ldap</artifactId>
+  <artifactId>igloo-ldap</artifactId>
   <name>eSCIMo LDAP Backend</name>
   
   <properties>

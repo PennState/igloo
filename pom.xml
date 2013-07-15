@@ -34,10 +34,10 @@
   </properties>
 
   <modules>
-    <module>server</module>
-    <module>common</module>
-    <module>client</module>
-    <module>ldap</module>
+    <module>igloo-server</module>
+    <module>igloo-common</module>
+    <module>igloo-client</module>
+    <module>igloo-ldap</module>
   </modules>
   
  <dependencyManagement>

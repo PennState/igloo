@@ -23,7 +23,7 @@
      <artifactId>escimo</artifactId>
      <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>common</artifactId>
+    <artifactId>igloo-common</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>eSCIMo common API</name>
