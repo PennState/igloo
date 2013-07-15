@@ -20,7 +20,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache.directory.scim</groupId>
-    <artifactId>escimo</artifactId>
+    <artifactId>igloo</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   <artifactId>igloo-server</artifactId>
@@ -37,7 +37,7 @@
    
    <dependency>
     <groupId>${project.groupId}</groupId>
-    <artifactId>escimo-common</artifactId>
+    <artifactId>igloo-common</artifactId>
     <version>${project.version}</version>
    </dependency>   
   </dependencies>
