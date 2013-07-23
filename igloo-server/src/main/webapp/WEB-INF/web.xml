@@ -14,6 +14,10 @@
 			org.apache.wink.server.internal.servlet.RestServlet
 		</servlet-class>
 		<init-param>
+		  <param-name>javax.ws.rs.Application</param-name>
+		  <param-value>org.apache.directory.scim.Escimo</param-value>
+		</init-param>
+		<init-param>
 			<param-name>propertiesLocation</param-name>
 			<param-value>/WEB-INF/configuration.properties</param-value>
 		</init-param>

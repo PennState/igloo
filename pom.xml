@@ -38,6 +38,7 @@
     <module>igloo-common</module>
     <module>igloo-client</module>
     <module>igloo-ldap</module>
+    <module>igloo-memory</module>
   </modules>
   
  <dependencyManagement>
