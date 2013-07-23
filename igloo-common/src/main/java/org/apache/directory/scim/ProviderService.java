@@ -18,6 +18,9 @@
  */
 package org.apache.directory.scim;
 
+import org.apache.directory.scim.common.Group;
+import org.apache.directory.scim.common.User;
+
 /**
  *
  * @author <a href="mailto:dev@directory.apache.org">Apache Directory Project</a>
@@ -25,4 +28,16 @@ package org.apache.directory.scim;
 public interface ProviderService 
 {
 
+  User createUser( User user );
+  void deleteUser( User user );
+  User getUser( String id );
+  User mergeUser( User user );
+  User replaceUser( User user );
+  
+  Group createGroup( Group group );
+  void deleteGroup( Group group );
+  Group getGroup( String id );
+  Group mergeGroup( Group group );
+  Group replaceGroup( Group group );
+  
 }
