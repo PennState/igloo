@@ -61,7 +61,7 @@ public class UserResource {
   @Path( "{id}" )
   public User getUser(@PathParam("id") String id)
   {
-    return null;
+    return null; 
   }
     
   @PATCH
