@@ -1,17 +1,10 @@
 package org.apache.directory.scim.memory;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.directory.scim.ProviderService;
 import org.apache.directory.scim.common.Group;
 import org.apache.directory.scim.common.User;
 
 public class MemoryProvider implements ProviderService {
-  
-  private Map<String, Group> groups = new HashMap<String, Group>();
-  
-  private Map<String, User> users = new HashMap<String, User>();
 
   public Group createGroup(Group arg0) {
     // TODO Auto-generated method stub
