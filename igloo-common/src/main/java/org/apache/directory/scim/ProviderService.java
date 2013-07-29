@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.directory.scim.common.Group;
 import org.apache.directory.scim.common.User;
 
-import org.apache.directory.scim.search.Criteria;
+import org.apache.directory.scim.search.Filter;
 
 /**
  *
@@ -34,14 +34,14 @@ public interface ProviderService
 
   User createUser( User user );
   void deleteUser( User user );
-  List<User> findUsers( Criteria criteria );
+  List<User> findUsers( Filter criteria );
   User getUser( String id );
   User mergeUser( User user );
   User replaceUser( User user );
   
   Group createGroup( Group group );
   void deleteGroup( Group group );
-  List<Group> findGroups( Criteria criteria );
+  List<Group> findGroups( Filter criteria );
   Group getGroup( String id );
   Group mergeGroup( Group group );
   Group replaceGroup( Group group );
