@@ -18,8 +18,12 @@
  */
 package org.apache.directory.scim;
 
+import java.util.List;
+
 import org.apache.directory.scim.common.Group;
 import org.apache.directory.scim.common.User;
+
+import org.apache.directory.scim.search.Criteria;
 
 /**
  *
@@ -30,12 +34,14 @@ public interface ProviderService
 
   User createUser( User user );
   void deleteUser( User user );
+  List<User> findUsers( Criteria criteria );
   User getUser( String id );
   User mergeUser( User user );
   User replaceUser( User user );
   
   Group createGroup( Group group );
   void deleteGroup( Group group );
+  List<Group> findGroups( Criteria criteria );
   Group getGroup( String id );
   Group mergeGroup( Group group );
   Group replaceGroup( Group group );

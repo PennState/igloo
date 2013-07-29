@@ -36,8 +36,8 @@
 
 		<dependency>
 			<groupId>org.apache.wink</groupId>
-			<artifactId>wink-json-provider</artifactId>
-			<version>1.3.0</version>
+			<artifactId>wink-jackson-provider</artifactId>
+			<version>${wink.version}</version>
 		</dependency>
 	</dependencies>
 

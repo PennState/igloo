@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import org.apache.wink.providers.jackson.WinkJacksonJaxbJsonProvider;
+
 @ApplicationPath( "scim/v2.0" )
 public class Escimo extends Application {
   
@@ -16,6 +18,8 @@ public class Escimo extends Application {
     classes.add(SchemaResource.class);
     classes.add(Search.class);
     classes.add(UserResource.class);
+
+    classes.add(WinkJacksonJaxbJsonProvider.class);
     return classes;
   }
 
