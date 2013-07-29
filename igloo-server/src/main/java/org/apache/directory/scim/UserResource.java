@@ -18,10 +18,11 @@
  */
 package org.apache.directory.scim;
 
-import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -31,22 +32,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.ext.Providers;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.namespace.QName;
 
-import org.apache.directory.scim.common.Address;
-import org.apache.directory.scim.common.Meta;
-import org.apache.directory.scim.common.MultiValuedAttribute;
 import org.apache.directory.scim.common.User;
-
 import org.apache.directory.scim.search.Filter;
 import org.apache.directory.scim.search.Query;
-
-import com.sun.xml.bind.v2.ContextFactory;
 
 /**
  * 
@@ -57,6 +46,22 @@ import com.sun.xml.bind.v2.ContextFactory;
 @Produces( {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML} )
 public class UserResource {
   
+  private ServletContext context;
+  private String propertiesLocation;
+  
+  @Context
+  public void setServletContext(ServletContext context) {
+    System.out.println("Setting servlet context");
+    this.context = context;
+    
+    for(String initParameterName: Collections.list(context.getInitParameterNames())) {
+      System.out.println("Init parameter: " + initParameterName);
+    }
+    
+    propertiesLocation = context.getInitParameter("propertiesLocation");
+    System.out.println("Properties location: " + propertiesLocation);
+  }
+  
   @GET
   public List<User> getUser( @QueryParam("attributes") String attributes,
                              @QueryParam("filter") String filter,
@@ -64,7 +69,7 @@ public class UserResource {
                              @QueryParam("sortOrder") String sortOrder,
                              @QueryParam("startIndex") String startIndex,
                              @QueryParam("count") String count )
-  {
+  { 
     System.out.println("Get on UserResource");
     System.out.println("Filter: " + filter);
     List<User> users = new ArrayList<User>();
@@ -102,7 +107,7 @@ public class UserResource {
   public List<User> search(Query query) {
     System.out.println("Got to search");
     System.out.println("Query: " + query);
-    Filter criteria = new Filter("Filter goes here");
+    Filter filter = new Filter("Filter goes here");
 
     List<User> users = new ArrayList<User>();
     return users;

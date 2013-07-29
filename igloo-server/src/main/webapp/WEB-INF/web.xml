@@ -4,6 +4,10 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
+  <context-param>
+    <param-name>propertiesLocation</param-name>
+    <param-value>/WEB-INF/configuration.properties</param-value>
+  </context-param>
 	<listener>
 		<listener-class></listener-class>
 	</listener>
