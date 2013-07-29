@@ -1,8 +1,11 @@
 package org.apache.directory.scim.memory;
 
+import java.util.List;
+
 import org.apache.directory.scim.ProviderService;
 import org.apache.directory.scim.common.Group;
 import org.apache.directory.scim.common.User;
+import org.apache.directory.scim.search.Filter;
 
 public class MemoryProvider implements ProviderService {
 
@@ -24,6 +27,16 @@ public class MemoryProvider implements ProviderService {
   public void deleteUser(User arg0) {
     // TODO Auto-generated method stub
     
+  }
+
+  public List<Group> findGroups(Filter arg0) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<User> findUsers(Filter arg0) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
   public Group getGroup(String arg0) {
@@ -55,5 +68,6 @@ public class MemoryProvider implements ProviderService {
     // TODO Auto-generated method stub
     return null;
   }
+
 
 }

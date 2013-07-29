@@ -19,7 +19,7 @@ public class Query {
     return attributes;
   }
 
-  public void setAttributes() {
+  public void setAttributes(String attributes) {
     this.attributes = attributes;
   }
 

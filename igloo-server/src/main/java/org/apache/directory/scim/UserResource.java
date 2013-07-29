@@ -43,7 +43,7 @@ import org.apache.directory.scim.common.Meta;
 import org.apache.directory.scim.common.MultiValuedAttribute;
 import org.apache.directory.scim.common.User;
 
-import org.apache.directory.scim.search.Criteria;
+import org.apache.directory.scim.search.Filter;
 import org.apache.directory.scim.search.Query;
 
 import com.sun.xml.bind.v2.ContextFactory;
@@ -102,7 +102,7 @@ public class UserResource {
   public List<User> search(Query query) {
     System.out.println("Got to search");
     System.out.println("Query: " + query);
-    Criteria criteria = new Criteria("Filter goes here");
+    Filter criteria = new Filter("Filter goes here");
 
     List<User> users = new ArrayList<User>();
     return users;
