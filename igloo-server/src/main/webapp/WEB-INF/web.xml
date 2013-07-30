@@ -1,39 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
-
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+                         "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
-  <context-param>
-    <param-name>propertiesLocation</param-name>
-    <param-value>/WEB-INF/configuration.properties</param-value>
-  </context-param>
-	<listener>
-		<listener-class></listener-class>
-	</listener>
-	<!-- Servlets -->
-	<servlet>
-		<servlet-name>scimService</servlet-name>
-		<servlet-class>
-			org.apache.wink.server.internal.servlet.RestServlet
-		</servlet-class>
-		<init-param>
-		  <param-name>javax.ws.rs.Application</param-name>
-		  <param-value>org.apache.directory.scim.Escimo</param-value>
-		</init-param>
-		<init-param>
-			<param-name>propertiesLocation</param-name>
-			<param-value>/WEB-INF/configuration.properties</param-value>
-		</init-param>
-		<!-- <init-param>
+ <context-param>
+  <param-name>propertiesLocation</param-name>
+  <param-value>/WEB-INF/configuration.properties</param-value>
+ </context-param>
+ <listener/>
+ <!-- Servlets -->
+ <servlet>
+  <servlet-name>scimService</servlet-name>
+  <servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+  <!-- <init-param>
 			<param-name>winkApplicationConfigLocation</param-name>
 			<param-value>/WEB-INF/application</param-value>
 		</init-param>-->
-		<load-on-startup>0</load-on-startup>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>scimService</servlet-name>
-		<url-pattern>/scim/*</url-pattern>
-	</servlet-mapping>
+  <init-param>
+   <param-name>javax.ws.rs.Application</param-name>
+   <param-value>org.apache.directory.scim.Escimo</param-value>
+  </init-param>
+  <init-param>
+   <param-name>propertiesLocation</param-name>
+   <param-value>/WEB-INF/configuration.properties</param-value>
+  </init-param>
+  <load-on-startup>0</load-on-startup>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>scimService</servlet-name>
+  <url-pattern>/scim/*</url-pattern>
+ </servlet-mapping>
 </web-app>

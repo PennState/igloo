@@ -18,9 +18,12 @@
  */
 package org.apache.directory.scim;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -60,6 +63,16 @@ public class UserResource {
     
     propertiesLocation = context.getInitParameter("propertiesLocation");
     System.out.println("Properties location: " + propertiesLocation);
+    
+    Properties properties = new Properties();
+    try {
+		properties.load(context.getResourceAsStream("/WEB-INF/configuration.properties"));
+		System.out.println("Properties: " + properties);
+	} catch (IOException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+    
   }
   
   @GET
