@@ -44,6 +44,11 @@
 			<artifactId>servlet-api</artifactId>
 			<version>3.0.20100224</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.directory.scim</groupId>
+			<artifactId>igloo-memory</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>

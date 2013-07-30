@@ -1,11 +1,14 @@
 package org.apache.directory.scim.memory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.directory.scim.ProviderService;
 import org.apache.directory.scim.common.Group;
+import org.apache.directory.scim.common.Response;
+import org.apache.directory.scim.common.Response.Resources;
 import org.apache.directory.scim.common.User;
-import org.apache.directory.scim.search.Filter;
+import org.apache.directory.scim.search.Query;
 
 public class MemoryProvider implements ProviderService {
 
@@ -15,6 +18,7 @@ public class MemoryProvider implements ProviderService {
   }
 
   public User createUser(User arg0) {
+    System.out.println("Creating user: " + arg0.getUserName());
     // TODO Auto-generated method stub
     return null;
   }
@@ -29,14 +33,26 @@ public class MemoryProvider implements ProviderService {
     
   }
 
-  public List<Group> findGroups(Filter arg0) {
+  public Response findGroups(Query arg0) {
+    Response response = new Response();
+    List<User> users = new ArrayList<User>();
+    Resources resources = new Resources();
+    resources.getResource().addAll(users);
+    response.setResources(resources);
     // TODO Auto-generated method stub
-    return null;
+    return response;
   }
 
-  public List<User> findUsers(Filter arg0) {
+  public Response findUsers(Query arg0) {
+    Response response = new Response();
+    List<User> users = new ArrayList<User>();
+    response.setTotalResults(new Long(users.size()));
+    response.setItemsPerPage(arg0.getCount());
+    Resources resources = new Resources();
+    resources.getResource().addAll(users);
+    response.setResources(resources);
     // TODO Auto-generated method stub
-    return null;
+    return response;
   }
 
   public Group getGroup(String arg0) {

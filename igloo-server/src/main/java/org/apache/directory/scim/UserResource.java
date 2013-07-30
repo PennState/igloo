@@ -19,10 +19,6 @@
 package org.apache.directory.scim;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -36,9 +32,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.directory.scim.common.Response;
 import org.apache.directory.scim.common.User;
 import org.apache.directory.scim.search.Filter;
 import org.apache.directory.scim.search.Query;
+import org.apache.directory.scim.search.SortOrder;
 
 /**
  * 
@@ -49,81 +47,84 @@ import org.apache.directory.scim.search.Query;
 @Produces( {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML} )
 public class UserResource {
   
-  private ServletContext context;
   private String propertiesLocation;
+  private EscimoProviderFactory factory;
   
   @Context
   public void setServletContext(ServletContext context) {
-    System.out.println("Setting servlet context");
-    this.context = context;
+    propertiesLocation = context.getInitParameter("propertiesLocation");
     
-    for(String initParameterName: Collections.list(context.getInitParameterNames())) {
-      System.out.println("Init parameter: " + initParameterName);
+    Properties properties = (Properties) context.getAttribute("escimoProperties");
+    if(properties == null) {
+      properties = new Properties();
+      try {
+    		properties.load(context.getResourceAsStream(propertiesLocation));
+    		System.out.println("Setting eSCIMo properties: " + properties);
+    		context.setAttribute("escimoProperties", properties);
+    	} catch (IOException e) {
+    		System.out.println("Configuration file could not be read");
+    	}
     }
     
-    propertiesLocation = context.getInitParameter("propertiesLocation");
-    System.out.println("Properties location: " + propertiesLocation);
-    
-    Properties properties = new Properties();
-    try {
-		properties.load(context.getResourceAsStream("/WEB-INF/configuration.properties"));
-		System.out.println("Properties: " + properties);
-	} catch (IOException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
+    factory = (EscimoProviderFactory) context.getAttribute("escimoProviderFactory");
+    if(factory == null) {
+      String clazzName = properties.getProperty("escimo.resource.provider");
+      System.out.println("Creating provider factory: " + clazzName);
+      try {
+        factory = new EscimoProviderFactory(clazzName);
+        context.setAttribute("escimoProviderFactory", factory);
+      } catch (Exception e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
     
   }
   
   @GET
-  public List<User> getUser( @QueryParam("attributes") String attributes,
-                             @QueryParam("filter") String filter,
-                             @QueryParam("sortBy") String sortBy,
-                             @QueryParam("sortOrder") String sortOrder,
-                             @QueryParam("startIndex") String startIndex,
-                             @QueryParam("count") String count )
+  public Response getUser( @QueryParam("attributes") String attributes,
+                           @QueryParam("count") Integer count,
+                           @QueryParam("filter") Filter filter,
+                           @QueryParam("sortBy") String sortBy,
+                           @QueryParam("sortOrder") SortOrder sortOrder,
+                           @QueryParam("startIndex") Long startIndex ) throws InstantiationException, IllegalAccessException
   { 
-    System.out.println("Get on UserResource");
-    System.out.println("Filter: " + filter);
-    List<User> users = new ArrayList<User>();
-    User user1 = new User();
-    user1.setUserName("swm16");
-    users.add(user1);
-    User user2 = new User();
-    user2.setUserName("smoyer");
-    users.add(user2);
-    return users;
+    Query query = new Query();
+    query.setAttributes(attributes);
+    query.setCount(count);
+    query.setFilter(filter);
+    query.setSortBy(sortBy);
+    query.setSortOrder(sortOrder);
+    ProviderService provider = factory.getProvider();
+    return provider.findUsers(query);
   }
   
   @GET
   @Path( "{id}" )
-  public User getUser(@PathParam("id") String id)
+  public User getUser(@PathParam("id") String id) throws InstantiationException, IllegalAccessException
   {
-    User user1 = new User();
-    user1.setUserName("swm16");
-    return user1; 
+    ProviderService provider = factory.getProvider();
+    return provider.getUser(id); 
   }
     
   @PATCH
-  public User patchUser( @PathParam("user") String userId ) {
-    return null;
+  public User patchUser( User user ) throws InstantiationException, IllegalAccessException {
+    ProviderService provider = factory.getProvider();
+    return provider.mergeUser(user);
   }
 
   @POST
-  public User postUser(@PathParam("user") String userId) {
-    return null;
+  public User postUser(User user) throws InstantiationException, IllegalAccessException {
+    ProviderService provider = factory.getProvider();
+    return provider.createUser(user);
   }
 
   @POST
   @Path( ".search" )
   @Consumes( MediaType.APPLICATION_JSON )
-  public List<User> search(Query query) {
-    System.out.println("Got to search");
-    System.out.println("Query: " + query);
-    Filter filter = new Filter("Filter goes here");
-
-    List<User> users = new ArrayList<User>();
-    return users;
+  public Response search(Query query) throws InstantiationException, IllegalAccessException {
+    ProviderService provider = factory.getProvider();
+    return provider.findUsers(query);
   }
 
 }

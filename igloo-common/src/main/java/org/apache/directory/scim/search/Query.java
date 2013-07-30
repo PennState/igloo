@@ -9,11 +9,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Query {
 
   private String attributes;
-  private Long count;
-  private String filter;
+  private Integer count;
+  private Filter filter;
   private String sortBy;
   private SortOrder sortOrder;
-  private String startIndex;
+  private Long startIndex;
 
   public String getAttributes() {
     return attributes;
@@ -23,19 +23,19 @@ public class Query {
     this.attributes = attributes;
   }
 
-  public Long getCount() {
+  public Integer getCount() {
     return count;
   }
 
-  public void setCount(Long count) {
+  public void setCount(Integer count) {
     this.count = count;
   }
 
-  public String getFilter() {
+  public Filter getFilter() {
     return filter;
   }
 
-  public void setFilter(String filter) {
+  public void setFilter(Filter filter) {
     this.filter = filter;
   }
 
@@ -53,6 +53,14 @@ public class Query {
 
   public void setSortOrder(SortOrder sortOrder) {
     this.sortOrder = sortOrder;
+  }
+  
+  public Long getStartIndex() {
+    return startIndex;
+  }
+  
+  public void setStartIndex(Long startIndex) {
+    this.startIndex = startIndex;
   }
 
   public String toString() {
