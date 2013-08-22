@@ -15,7 +15,6 @@ public class Escimo extends Application {
   public Set<Class<?>> getClasses()
   {
     Set<Class<?>> classes = new HashSet<Class<?>>();
-    classes.add(SchemaResource.class);
     classes.add(Search.class);
     classes.add(UserResource.class);
 

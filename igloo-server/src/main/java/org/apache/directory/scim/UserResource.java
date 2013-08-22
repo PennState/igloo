@@ -32,8 +32,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.directory.scim.common.Response;
-import org.apache.directory.scim.common.User;
+import org.apache.directory.scim.models.ScimResponse;
+import org.apache.directory.scim.models.ScimUser;
 import org.apache.directory.scim.search.Filter;
 import org.apache.directory.scim.search.Query;
 import org.apache.directory.scim.search.SortOrder;
@@ -82,7 +82,7 @@ public class UserResource {
   }
   
   @GET
-  public Response getUser( @QueryParam("attributes") String attributes,
+  public ScimResponse getUser( @QueryParam("attributes") String attributes,
                            @QueryParam("count") Integer count,
                            @QueryParam("filter") Filter filter,
                            @QueryParam("sortBy") String sortBy,
@@ -101,20 +101,20 @@ public class UserResource {
   
   @GET
   @Path( "{id}" )
-  public User getUser(@PathParam("id") String id) throws InstantiationException, IllegalAccessException
+  public ScimUser getUser(@PathParam("id") String id) throws InstantiationException, IllegalAccessException
   {
     ProviderService provider = factory.getProvider();
     return provider.getUser(id); 
   }
     
   @PATCH
-  public User patchUser( User user ) throws InstantiationException, IllegalAccessException {
+  public ScimUser patchUser( ScimUser user ) throws InstantiationException, IllegalAccessException {
     ProviderService provider = factory.getProvider();
     return provider.mergeUser(user);
   }
 
   @POST
-  public User postUser(User user) throws InstantiationException, IllegalAccessException {
+  public ScimUser postUser(ScimUser user) throws InstantiationException, IllegalAccessException {
     ProviderService provider = factory.getProvider();
     return provider.createUser(user);
   }
@@ -122,7 +122,7 @@ public class UserResource {
   @POST
   @Path( ".search" )
   @Consumes( MediaType.APPLICATION_JSON )
-  public Response search(Query query) throws InstantiationException, IllegalAccessException {
+  public ScimResponse search(Query query) throws InstantiationException, IllegalAccessException {
     ProviderService provider = factory.getProvider();
     return provider.findUsers(query);
   }
