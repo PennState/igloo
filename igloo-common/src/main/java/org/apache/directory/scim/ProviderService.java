@@ -18,9 +18,9 @@
  */
 package org.apache.directory.scim;
 
-import org.apache.directory.scim.common.Group;
-import org.apache.directory.scim.common.Response;
-import org.apache.directory.scim.common.User;
+import org.apache.directory.scim.models.ScimGroup;
+import org.apache.directory.scim.models.ScimResponse;
+import org.apache.directory.scim.models.ScimUser;
 import org.apache.directory.scim.search.Query;
 
 /**
@@ -30,18 +30,18 @@ import org.apache.directory.scim.search.Query;
 public interface ProviderService 
 {
 
-  User createUser( User user );
-  void deleteUser( User user );
-  Response findUsers( Query query );
-  User getUser( String id );
-  User mergeUser( User user );
-  User replaceUser( User user );
+  ScimUser createUser( ScimUser user );
+  void deleteUser( ScimUser user );
+  ScimResponse findUsers( Query query );
+  ScimUser getUser( String id );
+  ScimUser mergeUser( ScimUser user );
+  ScimUser replaceUser( ScimUser user );
   
-  Group createGroup( Group group );
-  void deleteGroup( Group group );
-  Response findGroups( Query query );
-  Group getGroup( String id );
-  Group mergeGroup( Group group );
-  Group replaceGroup( Group group );
+  ScimGroup createGroup( ScimGroup group );
+  void deleteGroup( ScimGroup group );
+  ScimResponse findGroups( Query query );
+  ScimGroup getGroup( String id );
+  ScimGroup mergeGroup( ScimGroup group );
+  ScimGroup replaceGroup( ScimGroup group );
   
 }
