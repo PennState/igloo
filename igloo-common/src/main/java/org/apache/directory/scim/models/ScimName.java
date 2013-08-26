@@ -118,4 +118,65 @@ public class ScimName {
     this.honorificSuffix_ = honorificSuffix;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((familyName_ == null) ? 0 : familyName_.hashCode());
+    result = prime * result + ((formatted_ == null) ? 0 : formatted_.hashCode());
+    result = prime * result + ((givenName_ == null) ? 0 : givenName_.hashCode());
+    result = prime * result + ((honorificPrefix_ == null) ? 0 : honorificPrefix_.hashCode());
+    result = prime * result + ((honorificSuffix_ == null) ? 0 : honorificSuffix_.hashCode());
+    result = prime * result + ((middleName_ == null) ? 0 : middleName_.hashCode());
+    return result;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ScimName other = (ScimName) obj;
+    if (familyName_ == null) {
+      if (other.familyName_ != null)
+        return false;
+    } else if (!familyName_.equals(other.familyName_))
+      return false;
+    if (formatted_ == null) {
+      if (other.formatted_ != null)
+        return false;
+    } else if (!formatted_.equals(other.formatted_))
+      return false;
+    if (givenName_ == null) {
+      if (other.givenName_ != null)
+        return false;
+    } else if (!givenName_.equals(other.givenName_))
+      return false;
+    if (honorificPrefix_ == null) {
+      if (other.honorificPrefix_ != null)
+        return false;
+    } else if (!honorificPrefix_.equals(other.honorificPrefix_))
+      return false;
+    if (honorificSuffix_ == null) {
+      if (other.honorificSuffix_ != null)
+        return false;
+    } else if (!honorificSuffix_.equals(other.honorificSuffix_))
+      return false;
+    if (middleName_ == null) {
+      if (other.middleName_ != null)
+        return false;
+    } else if (!middleName_.equals(other.middleName_))
+      return false;
+    return true;
+  }
+
 }

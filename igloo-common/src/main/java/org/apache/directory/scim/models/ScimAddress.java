@@ -127,4 +127,65 @@ public class ScimAddress extends TypedMultiValuedAttribute<ScimAddressType> {
     this.streetAddress_ = streetAddress;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + ((country_ == null) ? 0 : country_.hashCode());
+    result = prime * result + ((formatted_ == null) ? 0 : formatted_.hashCode());
+    result = prime * result + ((locality_ == null) ? 0 : locality_.hashCode());
+    result = prime * result + ((postalCode == null) ? 0 : postalCode.hashCode());
+    result = prime * result + ((region_ == null) ? 0 : region_.hashCode());
+    result = prime * result + ((streetAddress_ == null) ? 0 : streetAddress_.hashCode());
+    return result;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (!super.equals(obj))
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ScimAddress other = (ScimAddress) obj;
+    if (country_ == null) {
+      if (other.country_ != null)
+        return false;
+    } else if (!country_.equals(other.country_))
+      return false;
+    if (formatted_ == null) {
+      if (other.formatted_ != null)
+        return false;
+    } else if (!formatted_.equals(other.formatted_))
+      return false;
+    if (locality_ == null) {
+      if (other.locality_ != null)
+        return false;
+    } else if (!locality_.equals(other.locality_))
+      return false;
+    if (postalCode == null) {
+      if (other.postalCode != null)
+        return false;
+    } else if (!postalCode.equals(other.postalCode))
+      return false;
+    if (region_ == null) {
+      if (other.region_ != null)
+        return false;
+    } else if (!region_.equals(other.region_))
+      return false;
+    if (streetAddress_ == null) {
+      if (other.streetAddress_ != null)
+        return false;
+    } else if (!streetAddress_.equals(other.streetAddress_))
+      return false;
+    return true;
+  }
+
 }

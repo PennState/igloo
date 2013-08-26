@@ -8,7 +8,7 @@ import javax.ws.rs.core.Application;
 
 import org.apache.wink.providers.jackson.WinkJacksonJaxbJsonProvider;
 
-@ApplicationPath( "scim/v2.0" )
+@ApplicationPath( "v1" )
 public class Escimo extends Application {
   
   @Override

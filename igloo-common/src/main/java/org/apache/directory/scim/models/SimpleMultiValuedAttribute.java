@@ -28,4 +28,35 @@ public abstract class SimpleMultiValuedAttribute extends MultiValuedAttribute {
     this.value_ = value;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + ((value_ == null) ? 0 : value_.hashCode());
+    return result;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (!super.equals(obj))
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    SimpleMultiValuedAttribute other = (SimpleMultiValuedAttribute) obj;
+    if (value_ == null) {
+      if (other.value_ != null)
+        return false;
+    } else if (!value_.equals(other.value_))
+      return false;
+    return true;
+  }
+
 }

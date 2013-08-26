@@ -85,4 +85,53 @@ public abstract class ScimResource {
     this.meta = meta;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((extensions == null) ? 0 : extensions.hashCode());
+    result = prime * result + ((externalId == null) ? 0 : externalId.hashCode());
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((meta == null) ? 0 : meta.hashCode());
+    return result;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ScimResource other = (ScimResource) obj;
+    if (extensions == null) {
+      if (other.extensions != null)
+        return false;
+    } else if (!extensions.equals(other.extensions))
+      return false;
+    if (externalId == null) {
+      if (other.externalId != null)
+        return false;
+    } else if (!externalId.equals(other.externalId))
+      return false;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    if (meta == null) {
+      if (other.meta != null)
+        return false;
+    } else if (!meta.equals(other.meta))
+      return false;
+    return true;
+  }
+
 }

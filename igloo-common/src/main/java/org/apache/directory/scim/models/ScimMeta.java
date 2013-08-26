@@ -94,4 +94,59 @@ public class ScimMeta {
     this.version = version;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((attributes == null) ? 0 : attributes.hashCode());
+    result = prime * result + ((created == null) ? 0 : created.hashCode());
+    result = prime * result + ((lastModified == null) ? 0 : lastModified.hashCode());
+    result = prime * result + ((location == null) ? 0 : location.hashCode());
+    result = prime * result + ((version == null) ? 0 : version.hashCode());
+    return result;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ScimMeta other = (ScimMeta) obj;
+    if (attributes == null) {
+      if (other.attributes != null)
+        return false;
+    } else if (!attributes.equals(other.attributes))
+      return false;
+    if (created == null) {
+      if (other.created != null)
+        return false;
+    } else if (!created.equals(other.created))
+      return false;
+    if (lastModified == null) {
+      if (other.lastModified != null)
+        return false;
+    } else if (!lastModified.equals(other.lastModified))
+      return false;
+    if (location == null) {
+      if (other.location != null)
+        return false;
+    } else if (!location.equals(other.location))
+      return false;
+    if (version == null) {
+      if (other.version != null)
+        return false;
+    } else if (!version.equals(other.version))
+      return false;
+    return true;
+  }
+
 }
