@@ -35,7 +35,9 @@ public abstract class SimpleTypedMultiValuedAttribute<T extends ScimType> extend
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
+    System.out.println("SimpleTypedMultiValuedAttribute hashcode: " + result);
     result = prime * result + ((value_ == null) ? 0 : value_.hashCode());
+    System.out.println("SimpleTypedMultiValuedAttribute hashcode: " + result);
     return result;
   }
 

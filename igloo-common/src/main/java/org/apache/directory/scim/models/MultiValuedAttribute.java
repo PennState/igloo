@@ -58,9 +58,13 @@ public abstract class MultiValuedAttribute {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    System.out.println("MultiValuedAttribute hashcode: " + result);
     result = prime * result + ((display == null) ? 0 : display.hashCode());
+    System.out.println("MultiValuedAttribute hashcode: " + result);
     result = prime * result + ((operation == null) ? 0 : operation.hashCode());
+    System.out.println("MultiValuedAttribute hashcode: " + result);
     result = prime * result + (primary ? 1231 : 1237);
+    System.out.println("MultiValuedAttribute hashcode: " + result);
     return result;
   }
 

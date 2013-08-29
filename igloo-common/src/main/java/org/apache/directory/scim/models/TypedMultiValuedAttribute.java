@@ -26,10 +26,12 @@ public abstract class TypedMultiValuedAttribute<T extends ScimType> extends Mult
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
+    System.out.println("MultiValuedAttribute hashcode: " + result);
     // ***** WARNING *****
     // The type enum's name is used here so that the resulting hashcode will
     // be consistent across JVM restarts.
     result = prime * result + ((type == null) ? 0 : type.name().hashCode());
+    System.out.println("MultiValuedAttribute hashcode: " + result);
     return result;
   }
 
