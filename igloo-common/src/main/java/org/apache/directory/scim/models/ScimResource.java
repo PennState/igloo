@@ -3,13 +3,11 @@
  */
 package org.apache.directory.scim.models;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementRef;
-
-import org.codehaus.jackson.annotate.JsonUnwrapped;
 
 /**
  * @author stevemoyer
@@ -17,8 +15,8 @@ import org.codehaus.jackson.annotate.JsonUnwrapped;
  */
 public abstract class ScimResource {
   
-  @XmlElementRef
-  private List<ScimExtension> extensions;
+  @XmlAnyElement
+  private Map<String, ScimExtension> extensions;
   
   @XmlElement(name = "externalId")
   private String externalId;
@@ -32,14 +30,14 @@ public abstract class ScimResource {
   /**
    * @return the extensions
    */
-  public List<ScimExtension> getExtensions() {
+  public Map<String, ScimExtension> getExtensions() {
     return extensions;
   }
 
   /**
    * @param extensions the extensions to set
    */
-  public void setExtensions(List<ScimExtension> extensions) {
+  public void setExtensions(Map<String, ScimExtension> extensions) {
     this.extensions = extensions;
   }
 
