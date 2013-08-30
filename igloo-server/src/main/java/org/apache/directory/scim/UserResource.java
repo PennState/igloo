@@ -26,11 +26,11 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.EntityTag;
@@ -47,6 +47,8 @@ import org.apache.directory.scim.models.ScimUser;
 import org.apache.directory.scim.search.Filter;
 import org.apache.directory.scim.search.Query;
 import org.apache.directory.scim.search.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -56,6 +58,8 @@ import org.apache.directory.scim.search.SortOrder;
 @Path("Users")
 @Produces( {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML} )
 public class UserResource {
+  
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
   
   private String propertiesLocation;
   private EscimoProviderFactory factory;
@@ -113,8 +117,6 @@ public class UserResource {
   @Path( "{id}" )
   public Response getUser(@PathParam("id") String id, @Context Request request, @Context UriInfo uriInfo) throws InstantiationException, IllegalAccessException
   {
-    Response response = null;
-    
     // Set up cacheControl
     CacheControl cacheControl = new CacheControl();
     cacheControl.setMaxAge(86400);
@@ -159,11 +161,8 @@ public class UserResource {
           responseBuilder.location(uri);
           responseBuilder.tag(etag);        
         }
-      }
-      
-      response = responseBuilder.build();
+      }      
     } else {
-      //throw new WebApplicationException(Response.Status.NOT_FOUND);
       responseBuilder = Response.status(Status.NOT_FOUND);
     }
 
@@ -177,9 +176,51 @@ public class UserResource {
   }
 
   @POST
-  public ScimUser postUser(ScimUser user) throws InstantiationException, IllegalAccessException {
+  public Response postUser(ScimUser scimUserIn, @Context Request request, @Context UriInfo uriInfo) throws InstantiationException, IllegalAccessException {
+    // Set up cacheControl
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setMaxAge(86400);
+    
+    // Get the requested user
     ProviderService provider = factory.getProvider();
-    return provider.createUser(user);
+    ScimUser scimUserOut = provider.createUser(scimUserIn);
+    
+    // The ResponseBuilder will be built at some point
+    ResponseBuilder responseBuilder = null;
+    
+    if(scimUserOut != null) {
+      // Generate the etag
+      EntityTag etag = new EntityTag("" + scimUserOut.hashCode());
+      
+      ScimMeta meta = scimUserOut.getMeta();
+      
+      // Get the absolute URL for this user
+      URI uri = uriInfo.getAbsolutePath();
+      LOGGER.debug("Location: " + uri.toString());
+      if(uri != null) {
+        
+        // Copy the ETag into the meta block
+        meta.setVersion(etag.getValue());
+        
+        // Set the location element in the meta block
+        meta.setLocation(uri.toString());
+        scimUserOut.setMeta(meta);
+      }
+       
+      // Sent the created ScimUser as the entity
+      responseBuilder = Response.ok(scimUserOut);
+      responseBuilder.status(Status.CREATED);
+    } else {
+      responseBuilder = Response.status(Status.CONFLICT);
+    }
+    return responseBuilder.build();
+  }
+  
+  @PUT
+  @Path( "{id}" )
+  public ScimUser putUser(@PathParam("id") String id, ScimUser scimUser, @Context Request request, @Context UriInfo uriInfo) throws InstantiationException, IllegalAccessException {
+    ProviderService provider = factory.getProvider();
+    return provider.replaceUser(scimUser);
   }
 
   @POST
