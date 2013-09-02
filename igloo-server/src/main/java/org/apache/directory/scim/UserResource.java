@@ -20,6 +20,7 @@ package org.apache.directory.scim;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -34,6 +35,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
@@ -41,6 +43,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.directory.scim.models.ScimExtension;
 import org.apache.directory.scim.models.ScimMeta;
 import org.apache.directory.scim.models.ScimResponse;
 import org.apache.directory.scim.models.ScimUser;
@@ -65,7 +68,7 @@ public class UserResource {
   private EscimoProviderFactory factory;
   
   @Context
-  public void setServletContext(ServletContext context) {
+  public void setServletContext(ServletContext context) throws InstantiationException, IllegalAccessException {
     propertiesLocation = context.getInitParameter("propertiesLocation");
     
     Properties properties = (Properties) context.getAttribute("escimoProperties");
@@ -87,12 +90,19 @@ public class UserResource {
       try {
         factory = new EscimoProviderFactory(clazzName);
         context.setAttribute("escimoProviderFactory", factory);
+        
+        System.out.println("Creating extension registry");
+        ProviderService provider = factory.getProvider();
+        List<Class<? extends ScimExtension>> extensionClasses = provider.getExtensionClasses();
+        for(Class<? extends ScimExtension> extensionClass: extensionClasses) {
+          ScimExtension extension = extensionClass.newInstance();
+          ScimExtensionRegistry.getInstance().registerExtension(extension);
+        }
       } catch (Exception e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
-    
   }
   
   @GET
@@ -218,9 +228,63 @@ public class UserResource {
   
   @PUT
   @Path( "{id}" )
-  public ScimUser putUser(@PathParam("id") String id, ScimUser scimUser, @Context Request request, @Context UriInfo uriInfo) throws InstantiationException, IllegalAccessException {
-    ProviderService provider = factory.getProvider();
-    return provider.replaceUser(scimUser);
+  public Response putUser(@PathParam("id") String id, ScimUser scimUserIn, @Context Request request, @Context UriInfo uriInfo, @Context HttpHeaders headers) throws InstantiationException, IllegalAccessException {
+    // Set up cacheControl
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setMaxAge(86400);
+
+    // The ResponseBuilder will be built at some point
+    ResponseBuilder responseBuilder = null;
+
+    // Make sure the user has sent an ETag via an If-Match request header
+    if(headers.getRequestHeader("If-Match") == null) {
+      responseBuilder = Response.status(Status.BAD_REQUEST);
+      responseBuilder.entity("Resource modification requires \"If-Match\" request header");
+    } else {
+      
+      // Get the requested user
+      ProviderService provider = factory.getProvider();
+      ScimUser existingScimUser = provider.getUser(id);      
+      EntityTag existingEtag = new EntityTag("" + existingScimUser.hashCode());
+      
+      // Make sure the ETag matches
+      responseBuilder = request.evaluatePreconditions(existingEtag);
+      
+      // If the ResponseBuilder exists, a precondition has failed
+      if(responseBuilder != null) {
+        responseBuilder.entity("Resource modification requires that the \"If-Match\" request header contains the current ETag");
+        responseBuilder.cacheControl(cacheControl);
+        responseBuilder.tag(existingEtag);       
+      } else {
+        ScimUser scimUserOut = provider.replaceUser(scimUserIn);
+        if(scimUserOut != null) {
+          // Generate the etag
+          EntityTag etag = new EntityTag("" + scimUserOut.hashCode());
+          
+          ScimMeta meta = scimUserOut.getMeta();
+          
+          // Get the absolute URL for this user
+          URI uri = uriInfo.getAbsolutePath();
+          LOGGER.debug("Location: " + uri.toString());
+          if(uri != null) {
+            
+            // Copy the ETag into the meta block
+            meta.setVersion(etag.getValue());
+            
+            // Set the location element in the meta block
+            meta.setLocation(uri.toString());
+            scimUserOut.setMeta(meta);
+          }
+           
+          // Sent the created ScimUser as the entity
+          responseBuilder = Response.ok(scimUserOut);
+        } else {
+          responseBuilder = Response.status(Status.CONFLICT);
+        }
+      }
+    }
+    
+    return responseBuilder.build();
   }
 
   @POST
