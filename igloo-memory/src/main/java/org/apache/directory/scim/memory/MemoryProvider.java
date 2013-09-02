@@ -2,11 +2,15 @@ package org.apache.directory.scim.memory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.directory.scim.ProviderService;
+import org.apache.directory.scim.models.ScimExtension;
 import org.apache.directory.scim.models.ScimGroup;
+import org.apache.directory.scim.models.ScimResource;
 import org.apache.directory.scim.models.ScimResponse;
 import org.apache.directory.scim.models.ScimUser;
+import org.apache.directory.scim.models.Urn;
 import org.apache.directory.scim.search.Query;
 
 public class MemoryProvider implements ProviderService {
@@ -80,5 +84,9 @@ public class MemoryProvider implements ProviderService {
     return null;
   }
 
+  public List<Class<? extends ScimExtension>> getExtensionClasses() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
 }
