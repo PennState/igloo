@@ -4,6 +4,7 @@
 package org.apache.directory.scim.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -14,9 +15,14 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.directory.scim.ScimExtensionRegistry;
 import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.AnnotationIntrospector;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.introspect.JacksonAnnotationIntrospector;
+import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 
 /**
  * @author stevemoyer
@@ -25,7 +31,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public abstract class ScimResource {
   
-  private Map<String, ScimExtension> extensions;
+  private Map<String, ScimExtension> extensions = new HashMap<String, ScimExtension>();
   
   private String externalId;
   
@@ -52,9 +58,33 @@ public abstract class ScimResource {
    * @param extensions the extensions to set
    */
   @XmlTransient
-  @JsonAnySetter
   public void setExtensions(Map<String, ScimExtension> extensions) {
     this.extensions = extensions;
+  }
+  
+  @JsonAnySetter
+  public void setExtensions(String key, Object value) {
+    System.out.println("Found a ScimExtension");
+    System.out.println("Extension's URN: " + key);
+    System.out.println("Extension's string representation: " + value);
+    
+    Class<? extends ScimResource> resourceClass = getClass();
+    System.out.println("Resource class: " + resourceClass.getSimpleName());
+    
+    Class<? extends ScimExtension> extensionClass = ScimExtensionRegistry.getInstance().getExtensionClass(resourceClass, key);
+    System.out.println("Extension class: " + extensionClass.getSimpleName());
+    
+    ObjectMapper mapper = new ObjectMapper();
+    AnnotationIntrospector jaxbIntrospector = new JaxbAnnotationIntrospector();
+    AnnotationIntrospector jacksonIntrospector = new JacksonAnnotationIntrospector();
+    AnnotationIntrospector pair = new AnnotationIntrospector.Pair(jacksonIntrospector, jaxbIntrospector);
+    mapper.setAnnotationIntrospector(pair);
+    
+    ScimExtension extension = mapper.convertValue(value, extensionClass);
+    if(extension != null) {
+      System.out.println("    ***** Added extension to the resource *****");
+      extensions.put(key, extension);
+    }
   }
 
   /**

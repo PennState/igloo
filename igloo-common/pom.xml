@@ -28,13 +28,12 @@
     <packaging>jar</packaging>
     <name>eSCIMo common API</name>
 
-
-
     <dependencies>
     	<dependency>
     		<groupId>org.codehaus.jackson</groupId>
-    		<artifactId>jackson-core-asl</artifactId>
+    		<artifactId>jackson-xc</artifactId>
     		<version>1.9.4</version>
     	</dependency>
     </dependencies>
+    
 </project>

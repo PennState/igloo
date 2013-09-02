@@ -18,6 +18,9 @@
  */
 package org.apache.directory.scim;
 
+import java.util.List;
+
+import org.apache.directory.scim.models.ScimExtension;
 import org.apache.directory.scim.models.ScimGroup;
 import org.apache.directory.scim.models.ScimResponse;
 import org.apache.directory.scim.models.ScimUser;
@@ -29,6 +32,8 @@ import org.apache.directory.scim.search.Query;
  */
 public interface ProviderService 
 {
+  
+  List<Class<? extends ScimExtension>> getExtensionClasses();
 
   ScimUser createUser( ScimUser user );
   void deleteUser( ScimUser user );
