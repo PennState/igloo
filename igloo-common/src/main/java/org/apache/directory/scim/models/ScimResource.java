@@ -3,40 +3,56 @@
  */
 package org.apache.directory.scim.models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.codehaus.jackson.annotate.JsonAnyGetter;
+import org.codehaus.jackson.annotate.JsonAnySetter;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * @author stevemoyer
  *
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public abstract class ScimResource {
   
-  @XmlAnyElement
   private Map<String, ScimExtension> extensions;
   
-  @XmlElement(name = "externalId")
   private String externalId;
   
-  @XmlElement(name = "id")
   private UUID id;
   
-  @XmlElement(name = "meta")
   private ScimMeta meta;
 
   /**
    * @return the extensions
    */
-  public Map<String, ScimExtension> getExtensions() {
+  @XmlAnyElement
+  @JsonIgnore
+  public List<ScimExtension> getExtensionList() {
+    return new ArrayList<ScimExtension>(extensions.values());
+  }
+  
+  @XmlTransient
+  @JsonAnyGetter
+  public Map<String, ScimExtension> getExtensionsMap() {
     return extensions;
   }
 
   /**
    * @param extensions the extensions to set
    */
+  @XmlTransient
+  @JsonAnySetter
   public void setExtensions(Map<String, ScimExtension> extensions) {
     this.extensions = extensions;
   }
@@ -44,6 +60,7 @@ public abstract class ScimResource {
   /**
    * @return the externalId
    */
+  @XmlElement(name = "externalId")
   public String getExternalId() {
     return externalId;
   }
@@ -58,6 +75,7 @@ public abstract class ScimResource {
   /**
    * @return the id
    */
+  @XmlElement(name = "id")
   public UUID getId() {
     return id;
   }
@@ -72,6 +90,7 @@ public abstract class ScimResource {
   /**
    * @return the meta
    */
+  @XmlElement(name = "meta")
   public ScimMeta getMeta() {
     return meta;
   }
