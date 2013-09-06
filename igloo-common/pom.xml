@@ -34,6 +34,17 @@
     		<artifactId>jackson-xc</artifactId>
     		<version>1.9.4</version>
     	</dependency>
+    	<dependency>
+    		<groupId>pl.pragmatists</groupId>
+    		<artifactId>JUnitParams</artifactId>
+    		<version>1.0.1</version>
+    		<scope>test</scope>
+    	</dependency>
+    	<dependency>
+    		<groupId>org.slf4j</groupId>
+    		<artifactId>slf4j-simple</artifactId>
+    		<version>1.7.5</version>
+    	</dependency>
     </dependencies>
     
 </project>

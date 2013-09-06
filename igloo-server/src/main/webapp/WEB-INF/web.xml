@@ -6,6 +6,9 @@
 		<param-name>propertiesLocation</param-name>
 		<param-value>/WEB-INF/configuration.properties</param-value>
 	</context-param>
+	<listener>
+	  <listener-class>org.apache.directory.scim.EscimoContextListener</listener-class>
+	</listener>
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>scimService</servlet-name>

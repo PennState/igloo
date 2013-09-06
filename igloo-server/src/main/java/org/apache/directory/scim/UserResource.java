@@ -64,45 +64,13 @@ public class UserResource {
   
   private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
   
-  private String propertiesLocation;
   private EscimoProviderFactory factory;
+  private ProviderService provider;
   
   @Context
   public void setServletContext(ServletContext context) throws InstantiationException, IllegalAccessException {
-    propertiesLocation = context.getInitParameter("propertiesLocation");
-    
-    Properties properties = (Properties) context.getAttribute("escimoProperties");
-    if(properties == null) {
-      properties = new Properties();
-      try {
-    		properties.load(context.getResourceAsStream(propertiesLocation));
-    		System.out.println("Setting eSCIMo properties: " + properties);
-    		context.setAttribute("escimoProperties", properties);
-    	} catch (IOException e) {
-    		System.out.println("Configuration file could not be read");
-    	}
-    }
-    
     factory = (EscimoProviderFactory) context.getAttribute("escimoProviderFactory");
-    if(factory == null) {
-      String clazzName = properties.getProperty("escimo.resource.provider");
-      System.out.println("Creating provider factory: " + clazzName);
-      try {
-        factory = new EscimoProviderFactory(clazzName);
-        context.setAttribute("escimoProviderFactory", factory);
-        
-        System.out.println("Creating extension registry");
-        ProviderService provider = factory.getProvider();
-        List<Class<? extends ScimExtension>> extensionClasses = provider.getExtensionClasses();
-        for(Class<? extends ScimExtension> extensionClass: extensionClasses) {
-          ScimExtension extension = extensionClass.newInstance();
-          ScimExtensionRegistry.getInstance().registerExtension(extension);
-        }
-      } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    }
+    provider = factory.getProvider();
   }
   
   @GET
@@ -119,7 +87,6 @@ public class UserResource {
     query.setFilter(filter);
     query.setSortBy(sortBy);
     query.setSortOrder(sortOrder);
-    ProviderService provider = factory.getProvider();
     return provider.findUsers(query);
   }
   
@@ -132,7 +99,6 @@ public class UserResource {
     cacheControl.setMaxAge(86400);
     
     // Get the requested user
-    ProviderService provider = factory.getProvider();
     ScimUser scimUser = provider.getUser(id);
     
     // The ResponseBuilder will be built at some point
@@ -181,7 +147,6 @@ public class UserResource {
     
   @PATCH
   public ScimUser patchUser( ScimUser user ) throws InstantiationException, IllegalAccessException {
-    ProviderService provider = factory.getProvider();
     return provider.mergeUser(user);
   }
 
@@ -192,7 +157,6 @@ public class UserResource {
     cacheControl.setMaxAge(86400);
     
     // Get the requested user
-    ProviderService provider = factory.getProvider();
     ScimUser scimUserOut = provider.createUser(scimUserIn);
     
     // The ResponseBuilder will be built at some point
