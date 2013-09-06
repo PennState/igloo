@@ -1,14 +1,9 @@
 package org.apache.directory.scim.search;
 
-public enum Operator {
-  EQ,
-  CO,
-  SW,
-  PR,
-  GT,
-  GE,
-  LT,
-  LE,
-  AND,
-  OR
+public interface Operator {
+
+  boolean isAttributeOperator(String value);
+  boolean isGroupingOperator(String value);
+  boolean isLogicalOperator(String value);
+  
 }
