@@ -26,12 +26,12 @@ public class MemoryProvider implements ProviderService {
     return null;
   }
 
-  public void deleteGroup(ScimGroup arg0) {
+  public void deleteGroup(String id) {
     // TODO Auto-generated method stub
     
   }
 
-  public void deleteUser(ScimUser arg0) {
+  public void deleteUser(String id) {
     // TODO Auto-generated method stub
     
   }
@@ -64,22 +64,22 @@ public class MemoryProvider implements ProviderService {
     return null;
   }
 
-  public ScimGroup mergeGroup(ScimGroup arg0) {
+  public ScimGroup mergeGroup(String id, ScimGroup arg0) {
     // TODO Auto-generated method stub
     return null;
   }
 
-  public ScimUser mergeUser(ScimUser arg0) {
+  public ScimUser mergeUser(String id, ScimUser arg0) {
     // TODO Auto-generated method stub
     return null;
   }
 
-  public ScimGroup replaceGroup(ScimGroup arg0) {
+  public ScimGroup replaceGroup(String id, ScimGroup arg0) {
     // TODO Auto-generated method stub
     return null;
   }
 
-  public ScimUser replaceUser(ScimUser arg0) {
+  public ScimUser replaceUser(String id, ScimUser arg0) {
     // TODO Auto-generated method stub
     return null;
   }

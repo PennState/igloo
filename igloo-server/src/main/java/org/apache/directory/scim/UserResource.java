@@ -146,8 +146,9 @@ public class UserResource {
   }
     
   @PATCH
-  public ScimUser patchUser( ScimUser user ) throws InstantiationException, IllegalAccessException {
-    return provider.mergeUser(user);
+  @Path( "{id}" )
+  public ScimUser patchUser( @PathParam("id") String id, ScimUser scimUserIn ) throws InstantiationException, IllegalAccessException {
+    return provider.mergeUser(id, scimUserIn);
   }
 
   @POST
@@ -220,7 +221,7 @@ public class UserResource {
         responseBuilder.cacheControl(cacheControl);
         responseBuilder.tag(existingEtag);       
       } else {
-        ScimUser scimUserOut = provider.replaceUser(scimUserIn);
+        ScimUser scimUserOut = provider.replaceUser(id, scimUserIn);
         if(scimUserOut != null) {
           // Generate the etag
           EntityTag etag = new EntityTag("" + scimUserOut.hashCode());
