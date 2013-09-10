@@ -36,17 +36,17 @@ public interface ProviderService
   List<Class<? extends ScimExtension>> getExtensionClasses();
 
   ScimUser createUser( ScimUser user );
-  void deleteUser( ScimUser user );
+  void deleteUser( String id );
   ScimResponse findUsers( Query query );
   ScimUser getUser( String id );
-  ScimUser mergeUser( ScimUser user );
-  ScimUser replaceUser( ScimUser user );
+  ScimUser mergeUser( String id, ScimUser user );
+  ScimUser replaceUser( String id, ScimUser user );
   
   ScimGroup createGroup( ScimGroup group );
-  void deleteGroup( ScimGroup group );
+  void deleteGroup( String id );
   ScimResponse findGroups( Query query );
   ScimGroup getGroup( String id );
-  ScimGroup mergeGroup( ScimGroup group );
-  ScimGroup replaceGroup( ScimGroup group );
+  ScimGroup mergeGroup( String id, ScimGroup group );
+  ScimGroup replaceGroup( String id, ScimGroup group );
   
 }
