@@ -1,4 +1,4 @@
-package org.apache.directory.scim.search;
+package org.apache.directory.scim.search.lexerparser;
 
 public abstract class Expression<T> {
 
@@ -29,6 +29,8 @@ public abstract class Expression<T> {
   public void setRight(T right) {
     this.right = right;
   }
+  
+  public abstract String toString(String prefix);
 
 }
 
