@@ -74,6 +74,9 @@ public class FilterLexerTest extends AbstractLexerParserTest {
   public void testFilterLexerWithNot(String filterString) {
     LOGGER.info("Lexing filter string: " + filterString);
     FilterLexerSubclass lexer = new FilterLexerSubclass(filterString);
+    if(LOGGER.isInfoEnabled()) {
+      lexer.logTokens(lexer.getTokens());
+    }
     int index = Arrays.asList(NOTS).indexOf(filterString);
     assertTrue("Update the test class so that EXAMPLES and TOKENS have the same number of elements", index > -1 && index < NOT_INFIX_TOKENS.length);
     assertArrayEquals(NOT_INFIX_TOKENS[index], lexer.getTokens().toArray());
@@ -89,7 +92,9 @@ public class FilterLexerTest extends AbstractLexerParserTest {
   @Test
   public void testNext() {
     List<String> tokens = new ArrayList<String>(lexer_.getTokens());
-    lexer_.logTokens(tokens);
+    if(LOGGER.isDebugEnabled()) {
+      lexer_.logTokens(tokens);
+    }
     int tokenCount = tokens.size();
     LOGGER.debug("Tokens: " + tokenCount);
     for(int i = 0; i < tokenCount; i++) {
