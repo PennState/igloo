@@ -43,34 +43,44 @@ public class FilterParser {
   }
   
   private Expression<?> leftToRightParse(Expression<?> expressionIn) throws FilterParseException {
-    Expression<?> expression = null;
+    Expression<?> expressionOut = expressionIn;
     while(lexer_.hasNext()) {
-    	expression = recursiveParse(expression);
+    	expressionOut = recursiveParse(expressionOut);
     }
-    return expression;
+    return expressionOut;
   }
   
   private Expression<?> recursiveParse(Expression<?> expressionIn) throws FilterParseException {
     Expression<?> expressionOut = expressionIn;
+    logExpression("Expression in", expressionIn);
     if(lexer_.hasNext()) {
       String token = lexer_.next();
-      LOGGER.debug("Current token: " + token);
+      LOGGER.info("Current token: " + token);
       if(isAttributeName(token)) {
         SimpleExpression attributeExpression = parseAttributeExpression(token);
-        //expressionOut = recursiveParse(attributeExpression);
-        expressionOut = attributeExpression;
+        expressionOut = recursiveParse(attributeExpression);
+        //expressionOut = attributeExpression;
       } else if(LogicalOperator.isLogicalOperator(token)) {
         CompoundExpression logicalExpression = parseCompoundExpression(expressionIn, token);
-        //expressionOut = recursiveParse(logicalExpression);
-        expressionOut = logicalExpression;
+        expressionOut = recursiveParse(logicalExpression);
+        //expressionOut = logicalExpression;
       } else if(GroupingOperator.isGroupingOperator(token)) {
         GroupingOperator groupingOperator = GroupingOperator.fromSymbol(token);
         if(groupingOperator == GroupingOperator.OP) {
-          expressionOut = parseGroupedExpression();
+          expressionOut = parseGroupedExpression(false);
+        } else if(groupingOperator == GroupingOperator.NP) {
+          expressionOut = parseGroupedExpression(true);
+        } else if(groupingOperator == GroupingOperator.CP) {
+//          expressionOut = expressionIn;
+          return expressionIn;
         }
       }
+      return recursiveParse(expressionOut);
+      //expressionOut = recursiveParse(expressionOut);
     }
-    return expressionOut;
+//    logExpression("Expression out:", expressionOut);
+//    return expressionOut;
+    return expressionIn;
   }
   
   private String getAttributeValue(String attributeValue) {
@@ -146,20 +156,34 @@ public class FilterParser {
     return attributeExpression;
   }
   
-  private Expression<?> parseGroupedExpression() throws FilterParseException {
+  private Expression<?> parseGroupedExpression(boolean negativeGroup) throws FilterParseException {
+    Expression<?> expressionOut;
     //Expression<?> groupedExpression = recursiveParse(null);
-	Expression<?> groupedExpression = leftToRightParse(null);
+    Expression<?> groupedExpression = leftToRightParse(null);
+    logExpression("Grouped expression", groupedExpression);
+    if(negativeGroup) {
+      LOGGER.info("NP");
+      CompoundExpression notExpression = new CompoundExpression();
+      notExpression.setOperator(GroupingOperator.NP);
+      notExpression.setRight(groupedExpression);
+      expressionOut = notExpression;
+    } else {
+      LOGGER.info("OP");
+      expressionOut = groupedExpression;
+    }
     if(LOGGER.isDebugEnabled()) {
       LOGGER.info("***** Group start *****");
-      logExpression("Grouped expression", groupedExpression);
+      logExpression("Grouped expression", expressionOut);
       LOGGER.info("***** Group end *****");
-    }
-    return groupedExpression;
+    }   
+    logExpression("Grouped expression", expressionOut);
+    return expressionOut;
   }
   
   private CompoundExpression parseCompoundExpression(Expression<?> leftExpression, String operatorString) throws FilterParseException {
     CompoundExpression compoundExpression = new CompoundExpression();
     LogicalOperator operator = LogicalOperator.valueOf(operatorString);
+    LOGGER.info(operator.name());
     compoundExpression.setOperator(operator);
     compoundExpression.setLeft(leftExpression);
     
