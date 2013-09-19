@@ -10,9 +10,11 @@ public class CompoundExpression extends Expression<Expression> {
     sb.append("\n");
     sb.append(prefix);
     sb.append("|\n");
-    sb.append(prefix);
-    sb.append("+---");
-    sb.append(getLeft().toString(prefix + "|   "));
+    if(getLeft() != null) {
+	    sb.append(prefix);
+	    sb.append("+---");
+	    sb.append(getLeft().toString(prefix + "|   "));
+    }
     if(getRight() != null) {
       sb.append(prefix);
       sb.append("+---");
