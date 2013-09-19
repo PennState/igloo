@@ -47,6 +47,9 @@ public class FilterLexer implements Iterator<String> {
       cleanString = cleanString.replaceAll(" +", " ");
       LOGGER.debug("Padded parenthesis with single spaces: " + cleanString);
       
+      // Eliminate the space between NOT and ( and capitalize NOT
+      cleanString = cleanString.replaceAll("(?i)not *\\(", "NOT(");
+      
       // Trim leading and trailing spaces
       cleanString = cleanString.trim();
       LOGGER.debug("Cleaned leading and trailing spaces: " + cleanString);
