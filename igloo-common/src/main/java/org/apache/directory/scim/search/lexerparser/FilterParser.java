@@ -26,7 +26,8 @@ public class FilterParser {
   
   public Expression<?> parse() throws FilterParseException {
     LOGGER.info("Filter string: " + lexer_.getFilter());
-    Expression<?> expression = recursiveParse(null);
+    //Expression<?> expression = recursiveParse(null);
+    Expression<?> expression = leftToRightParse(null);
     logExpression("Filter expression", expression);
     return expression;
   }
@@ -41,6 +42,14 @@ public class FilterParser {
     return parse();
   }
   
+  private Expression<?> leftToRightParse(Expression<?> expressionIn) throws FilterParseException {
+    Expression<?> expression = null;
+    while(lexer_.hasNext()) {
+    	expression = recursiveParse(expression);
+    }
+    return expression;
+  }
+  
   private Expression<?> recursiveParse(Expression<?> expressionIn) throws FilterParseException {
     Expression<?> expressionOut = expressionIn;
     if(lexer_.hasNext()) {
@@ -48,10 +57,12 @@ public class FilterParser {
       LOGGER.debug("Current token: " + token);
       if(isAttributeName(token)) {
         SimpleExpression attributeExpression = parseAttributeExpression(token);
-        expressionOut = recursiveParse(attributeExpression);
+        //expressionOut = recursiveParse(attributeExpression);
+        expressionOut = attributeExpression;
       } else if(LogicalOperator.isLogicalOperator(token)) {
         CompoundExpression logicalExpression = parseCompoundExpression(expressionIn, token);
-        expressionOut = recursiveParse(logicalExpression);
+        //expressionOut = recursiveParse(logicalExpression);
+        expressionOut = logicalExpression;
       } else if(GroupingOperator.isGroupingOperator(token)) {
         GroupingOperator groupingOperator = GroupingOperator.fromSymbol(token);
         if(groupingOperator == GroupingOperator.OP) {
@@ -136,25 +147,32 @@ public class FilterParser {
   }
   
   private Expression<?> parseGroupedExpression() throws FilterParseException {
-    Expression<?> groupedExpression = recursiveParse(null);
+    //Expression<?> groupedExpression = recursiveParse(null);
+	Expression<?> groupedExpression = leftToRightParse(null);
     if(LOGGER.isDebugEnabled()) {
-      LOGGER.debug("***** Group start *****");
+      LOGGER.info("***** Group start *****");
       logExpression("Grouped expression", groupedExpression);
-      LOGGER.debug("***** Group end *****");
+      LOGGER.info("***** Group end *****");
     }
     return groupedExpression;
   }
   
   private CompoundExpression parseCompoundExpression(Expression<?> leftExpression, String operatorString) throws FilterParseException {
     CompoundExpression compoundExpression = new CompoundExpression();
-    compoundExpression.setOperator(LogicalOperator.valueOf(operatorString));
+    LogicalOperator operator = LogicalOperator.valueOf(operatorString);
+    compoundExpression.setOperator(operator);
     compoundExpression.setLeft(leftExpression);
     
-    Expression<?> rightExpression = recursiveParse(null);
+    //Expression<?> rightExpression = recursiveParse(null);
+    Expression<?> rightExpression = leftToRightParse(null);
     compoundExpression.setRight(rightExpression);
     if(LOGGER.isDebugEnabled()) {
+      LOGGER.info("***** LogicalOperator start *****");
+      LOGGER.info("LogicalOperator: " + operator.name());
+      logExpression("LeftExpression", leftExpression);
       logExpression("Right expression", rightExpression);
       logExpression("Logical expression", compoundExpression);
+      LOGGER.info("***** LogicalOperator end *****");
     }
     return compoundExpression;
   }
