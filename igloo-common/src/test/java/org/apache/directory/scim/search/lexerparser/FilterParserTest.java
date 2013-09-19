@@ -47,9 +47,26 @@ public class FilterParserTest extends AbstractLexerParserTest {
     return EXAMPLES_AND_EXTRAS;
   }
   
+  @SuppressWarnings("unused")
+  private String[] getNots() {
+    return NOTS;
+  }
+  
   @Test
   @Parameters(method = "getExamplesAndExtras")
   public void testParse(String filter) {
+    Expression<?> expression = null;
+    try {
+      expression = parser_.parse(filter);
+    } catch (FilterParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  @Parameters(method = "getNots")
+  public void testParseWithNots(String filter) {
     Expression<?> expression = null;
     try {
       expression = parser_.parse(filter);

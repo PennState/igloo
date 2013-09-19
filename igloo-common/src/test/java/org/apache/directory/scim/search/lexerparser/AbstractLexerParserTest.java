@@ -45,6 +45,20 @@ public abstract class AbstractLexerParserTest {
   
   protected static final String[] EXTRA_1_INFIX_TOKENS = {"(", "emails", "CO", "\"example.com\"", "OR", "emails", "CO", "\"example.org\"", ")"};
   protected static final String[] EXTRA_2_INFIX_TOKENS = {"(", "emails", "CO", "\"example.com\"", "OR", "emails", "CO", "\"example.org\"", ")", "AND", "userType", "EQ", "\"Employee\""};
+  
+  protected static final String NOT_EXAMPLE_1 = "not(userType eq \"Employee\")";
+  protected static final String NOT_EXAMPLE_1_1 = "not userType eq \"Employee\"";
+  protected static final String NOT_EXAMPLE_2 = "userType eq \"Employee\" and not(emails co \"example.com\" or emails co \"example.org\")";
+  protected static final String NOT_EXAMPLE_3 = "not(userType eq \"Employee\") and not(userType eq \"Intern\")";
+  protected static final String NOT_EXAMPLE_3_1 = "not userType eq \"Employee\" and not userType eq \"Intern\"";
+  protected static final String NOT_EXAMPLE_4 = "not(userType eq \"Employee\" or userType eq \"Intern\")";
+
+  protected static final String[] NOT_EXAMPLE_1_INFIX_TOKENS = {"NOT(", "userType", "EQ", "\"Employee\"", ")"};
+  protected static final String[] NOT_EXAMPLE_1_1_INFIX_TOKENS = {"not", "userType", "EQ", "\"Employee\""};
+  protected static final String[] NOT_EXAMPLE_2_INFIX_TOKENS = {"userType", "EQ", "\"Employee\"", "AND", "NOT(", "emails", "CO", "\"example.com\"", "OR", "emails", "CO", "\"example.org\"", ")"};
+  protected static final String[] NOT_EXAMPLE_3_INFIX_TOKENS = {"NOT(", "userType", "EQ", "\"Employee\"", ")", "AND", "NOT(", "userType", "EQ", "\"Intern\"", ")"};
+  protected static final String[] NOT_EXAMPLE_3_1_INFIX_TOKENS = {"not", "userType", "EQ", "\"Employee\"", "AND", "not", "userType", "EQ", "\"Intern\""};
+  protected static final String[] NOT_EXAMPLE_4_INFIX_TOKENS = {"NOT(", "userType", "EQ", "\"Employee\"", "OR", "userType", "EQ", "\"Intern\"", ")"};
 
   protected static final String[] EXAMPLES = {
     EXAMPLE_1,
@@ -67,6 +81,15 @@ public abstract class AbstractLexerParserTest {
   
   protected static final String[] EXAMPLES_AND_EXTRAS = ArrayUtils.addAll(EXAMPLES, EXTRAS);
   
+  protected static final String[] NOTS = {
+	  NOT_EXAMPLE_1,
+	  NOT_EXAMPLE_1_1,
+	  NOT_EXAMPLE_2,
+	  NOT_EXAMPLE_3,
+	  NOT_EXAMPLE_3_1,
+	  NOT_EXAMPLE_4
+  };
+  
   protected static final String[][] EXAMPLE_INFIX_TOKENS = {
     EXAMPLE_1_INFIX_TOKENS,
     EXAMPLE_2_INFIX_TOKENS,
@@ -87,6 +110,15 @@ public abstract class AbstractLexerParserTest {
   };
   
   protected static final String[][] EXAMPLE_AND_EXTRA_INFIX_TOKENS = ArrayUtils.addAll(EXAMPLE_INFIX_TOKENS, EXTRA_INFIX_TOKENS);
+  
+  protected static final String[][] NOT_INFIX_TOKENS = {
+	  NOT_EXAMPLE_1_INFIX_TOKENS,
+	  NOT_EXAMPLE_1_1_INFIX_TOKENS,
+	  NOT_EXAMPLE_2_INFIX_TOKENS,
+	  NOT_EXAMPLE_3_INFIX_TOKENS,
+	  NOT_EXAMPLE_3_1_INFIX_TOKENS,
+	  NOT_EXAMPLE_4_INFIX_TOKENS
+  };
   
   /**
    * 
