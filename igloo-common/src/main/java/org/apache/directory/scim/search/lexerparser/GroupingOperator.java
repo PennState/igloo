@@ -6,7 +6,8 @@ import java.util.Map;
 public enum GroupingOperator implements Operator {
   
   OP("("),
-  CP(")");
+  CP(")"),
+  NP("NOT(");
   
   private static Map<String, GroupingOperator> symbolMap;
   
