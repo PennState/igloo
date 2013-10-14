@@ -59,13 +59,18 @@ public class FilterLexerTest extends AbstractLexerParserTest {
     return NOTS;
   }
   
+  @SuppressWarnings("unused")
+  private String[] getAttributeValuesWithSpacesNewLinesAndCarriageReturns() {
+    return INPUT_ATTRIBUTE_VALUES_WITH_SPACES_NEWLINES_AND_CARRIAGE_RETURNS;
+  }
+  
   @Test
   @Parameters(method = "getExamplesAndExtras")
   public void testFilterLexer(String filterString) {
     LOGGER.info("Lexing filter string: " + filterString);
     FilterLexerSubclass lexer = new FilterLexerSubclass(filterString);
     int index = Arrays.asList(EXAMPLES_AND_EXTRAS).indexOf(filterString);
-    assertTrue("Update the test class so that EXAMPLES and TOKENS have the same number of elements", index > -1 && index < EXAMPLE_AND_EXTRA_INFIX_TOKENS.length);
+    assertTrue("Update the test class so that INPUTS and EXPECTEDS have the same number of elements", index > -1 && index < EXAMPLES_AND_EXTRAS.length);
     assertArrayEquals(EXAMPLE_AND_EXTRA_INFIX_TOKENS[index], lexer.getTokens().toArray());
   }
   
@@ -80,6 +85,16 @@ public class FilterLexerTest extends AbstractLexerParserTest {
     int index = Arrays.asList(NOTS).indexOf(filterString);
     assertTrue("Update the test class so that EXAMPLES and TOKENS have the same number of elements", index > -1 && index < NOT_INFIX_TOKENS.length);
     assertArrayEquals(NOT_INFIX_TOKENS[index], lexer.getTokens().toArray());
+  }
+  
+  @Test
+  @Parameters(method = "getAttributeValuesWithSpacesNewLinesAndCarriageReturns")
+  public void testFilterLexerWithSpacesNewLinesAndCarriageReturnsInAttributeValues(String filterString) {
+    LOGGER.info("Lexing filter string: " + filterString);
+    FilterLexerSubclass lexer = new FilterLexerSubclass(filterString);
+    int index = Arrays.asList(INPUT_ATTRIBUTE_VALUES_WITH_SPACES_NEWLINES_AND_CARRIAGE_RETURNS).indexOf(filterString);
+    assertTrue("Update the test class so that EXAMPLES and TOKENS have the same number of elements", index > -1 && index < INPUT_ATTRIBUTE_VALUES_WITH_SPACES_NEWLINES_AND_CARRIAGE_RETURNS.length);
+    assertArrayEquals(EXPECTED_ATTRIBUTE_VALUES_WITH_SPACES_NEWLINES_AND_CARRIAGE_RETURNS[index], lexer.getTokens().toArray());
   }
   
   @Test

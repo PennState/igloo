@@ -64,7 +64,23 @@ public class FilterLexer implements Iterator<String> {
           tokens[i] = token.toUpperCase();
         }
       }
+            
       tokens_ = new LinkedList<String>(Arrays.asList(tokens));
+      
+      // Reconcatenate value attributes with spaces (so that they both start
+      // and end with double-quotes
+      //
+      // DANGER - This loop relies on the size of the token list being changed
+      //          inside the loop.  Don't optimize it by looking up the list
+      //          size once before the loop starts.
+      for(int i = 0; i < tokens_.size(); i++) {
+        if(tokens_.get(i).startsWith("\"")) {
+          while(!tokens_.get(i).endsWith("\"")) {
+            tokens_.set(i, tokens_.get(i) + " " + tokens_.get(i + 1));
+            tokens_.remove(i + 1);
+          }
+        }
+      }
     }
     
     if(LOGGER.isDebugEnabled()) {

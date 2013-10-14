@@ -120,6 +120,18 @@ public abstract class AbstractLexerParserTest {
 	  NOT_EXAMPLE_4_INFIX_TOKENS
   };
   
+  protected static final String[] INPUT_ATTRIBUTE_VALUES_WITH_SPACES_NEWLINES_AND_CARRIAGE_RETURNS = {
+    "streetAddress EQ \"111 Heritage Way\"",
+    "streetAddress EQ \"111 Heritage Way\nSuite S\"",
+    "streetAddress EQ \"111 Heritage Way\rSuite S\""
+  };
+  
+  protected static final String[][] EXPECTED_ATTRIBUTE_VALUES_WITH_SPACES_NEWLINES_AND_CARRIAGE_RETURNS = {
+    {"streetAddress", "EQ", "\"111 Heritage Way\""},
+    {"streetAddress", "EQ", "\"111 Heritage Way\nSuite S\""},
+    {"streetAddress", "EQ", "\"111 Heritage Way\rSuite S\""}
+  };
+  
   /**
    * 
    */
