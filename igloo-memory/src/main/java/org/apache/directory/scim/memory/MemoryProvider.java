@@ -3,6 +3,7 @@ package org.apache.directory.scim.memory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.directory.scim.ProviderService;
 import org.apache.directory.scim.models.ScimExtension;
@@ -59,9 +60,12 @@ public class MemoryProvider implements ProviderService {
     return null;
   }
 
-  public ScimUser getUser(String arg0) {
-    // TODO Auto-generated method stub
-    return null;
+  public ScimUser getUser(String id) {
+    ScimUser user = new ScimUser();
+    UUID uuid = UUID.fromString(id);
+    user.setId(uuid);
+    user.setUserName("test");
+    return user;
   }
 
   public ScimGroup mergeGroup(String id, ScimGroup arg0) {

@@ -127,19 +127,21 @@ public class EscimoContextListener implements ServletContextListener {
     
     // Get a list of the ScimExtensions and register them
     List<Class<? extends ScimExtension>> extensionClasses = provider.getExtensionClasses();
-    for(Class<? extends ScimExtension> extensionClass: extensionClasses) {
-      try {
-        ScimExtension extension = extensionClass.newInstance();
-        LOGGER.info("Registered a SCIM extension: " + extension.getClass().getSimpleName());
-        ScimExtensionRegistry.getInstance().registerExtension(extension);
-      } catch (InstantiationException e) {
-        String message = EXCEPTION_EXTENSION_CLASS_NOT_CREATED + ": " + clazzName;
-        LOGGER.error(message);
-        throw new RuntimeException(message);
-      } catch (IllegalAccessException e1) {
-        String message = EXCEPTION_EXTENSION_CLASS_NOT_ALLOWED + ": " + clazzName;
-        LOGGER.error(message);
-        throw new RuntimeException(message);
+    if(extensionClasses != null) {
+      for(Class<? extends ScimExtension> extensionClass: extensionClasses) {
+        try {
+          ScimExtension extension = extensionClass.newInstance();
+          LOGGER.info("Registered a SCIM extension: " + extension.getClass().getSimpleName());
+          ScimExtensionRegistry.getInstance().registerExtension(extension);
+        } catch (InstantiationException e) {
+          String message = EXCEPTION_EXTENSION_CLASS_NOT_CREATED + ": " + clazzName;
+          LOGGER.error(message);
+          throw new RuntimeException(message);
+        } catch (IllegalAccessException e1) {
+          String message = EXCEPTION_EXTENSION_CLASS_NOT_ALLOWED + ": " + clazzName;
+          LOGGER.error(message);
+          throw new RuntimeException(message);
+        }
       }
     }
   }

@@ -18,10 +18,7 @@
  */
 package org.apache.directory.scim;
 
-import java.io.IOException;
 import java.net.URI;
-import java.util.List;
-import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -43,7 +40,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.directory.scim.models.ScimExtension;
+import org.apache.directory.scim.models.ScimError;
 import org.apache.directory.scim.models.ScimMeta;
 import org.apache.directory.scim.models.ScimResponse;
 import org.apache.directory.scim.models.ScimUser;
@@ -63,6 +60,10 @@ import org.slf4j.LoggerFactory;
 public class UserResource {
   
   private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
+  
+  private static final String ERROR_CODE_STRING_BAD_REQUEST = Integer.toString(Status.BAD_REQUEST.getStatusCode()); 
+  
+  private static final String ERROR_DESCRIPTION_BAD_REQUEST = "Resource modification requires \"If-Match\" request header";
   
   private EscimoProviderFactory factory;
   private ProviderService provider;
@@ -204,7 +205,8 @@ public class UserResource {
     // Make sure the user has sent an ETag via an If-Match request header
     if(headers.getRequestHeader("If-Match") == null) {
       responseBuilder = Response.status(Status.BAD_REQUEST);
-      responseBuilder.entity("Resource modification requires \"If-Match\" request header");
+      //responseBuilder.entity("Resource modification requires \"If-Match\" request header");
+      responseBuilder.entity(new ScimError(ERROR_CODE_STRING_BAD_REQUEST, ERROR_DESCRIPTION_BAD_REQUEST));
     } else {
       
       // Get the requested user
