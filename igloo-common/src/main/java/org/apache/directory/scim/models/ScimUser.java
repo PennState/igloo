@@ -1,5 +1,7 @@
 package org.apache.directory.scim.models;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -151,6 +153,37 @@ public class ScimUser extends ScimResource {
     }
     
     return address;
+  }
+  
+  public void addAddress(ScimAddress address)
+  {
+    if (addresses_ == null)
+    {
+      addresses_ = new ArrayList<ScimAddress>();
+    }
+    
+    if (address.isPrimary())
+    {
+      for (ScimAddress addr : addresses_)
+      {
+        addr.setPrimary(false);
+      }
+    }
+    
+    //Remove any duplicates with this type
+    Iterator<ScimAddress> iterator = addresses_.iterator();
+    
+    while(iterator.hasNext())
+    {
+      ScimAddress sa = iterator.next();
+      
+      if (sa.getType() == address.getType())
+      {
+        iterator.remove();
+      }
+    }
+    
+    addresses_.add(address);
   }
   
   /**
