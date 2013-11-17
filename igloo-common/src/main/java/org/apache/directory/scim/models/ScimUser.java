@@ -162,15 +162,7 @@ public class ScimUser extends ScimResource {
       addresses_ = new ArrayList<ScimAddress>();
     }
     
-    if (address.isPrimary())
-    {
-      for (ScimAddress addr : addresses_)
-      {
-        addr.setPrimary(false);
-      }
-    }
-    
-    //Remove any duplicates with this type
+    //Remove any duplicates with this type and toggle primary if necessary
     Iterator<ScimAddress> iterator = addresses_.iterator();
     
     while(iterator.hasNext())
@@ -180,6 +172,10 @@ public class ScimUser extends ScimResource {
       if (sa.getType() == address.getType())
       {
         iterator.remove();
+      }
+      else if (address.isPrimary())
+      {
+        sa.setPrimary(false);
       }
     }
     
