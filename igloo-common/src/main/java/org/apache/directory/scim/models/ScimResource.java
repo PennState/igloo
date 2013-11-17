@@ -62,6 +62,17 @@ public abstract class ScimResource {
     this.extensions = extensions;
   }
   
+  @XmlTransient 
+  public void addExtension(String key, ScimExtension extension)
+  {
+    if (extensions == null)
+    {
+      extensions = new HashMap<String, ScimExtension>();
+    }
+    
+    extensions.put(key, extension);
+  }
+  
   @JsonAnySetter
   public void setExtensions(String key, Object value) {
     System.out.println("Found a ScimExtension");
