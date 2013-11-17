@@ -121,6 +121,39 @@ public class ScimUser extends ScimResource {
   }
   
   /**
+   * Get the primary address or the only address if there's only one
+   * If there's multiple addresses but none marked primary we return
+   * the first address in the list
+   * @return ScimAddress or null if no addresses are set
+   */
+  public ScimAddress getPrimaryAddress()
+  {
+    ScimAddress address = null;
+    if (addresses_.size() == 1)
+    {
+      address = addresses_.get(0);
+    }
+    else if (addresses_.size() > 1)
+    {
+      for (ScimAddress addr : addresses_)
+      {
+        if (addr.isPrimary())
+        {
+          address = addr;
+          break;
+        }
+      }
+      
+      if (address == null)
+      {
+        address = addresses_.get(0);
+      }
+    }
+    
+    return address;
+  }
+  
+  /**
    * @param addresses the addresses to set
    */
   public void setAddresses(List<ScimAddress> addresses) {
