@@ -40,6 +40,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.directory.scim.exceptions.ScimException;
 import org.apache.directory.scim.models.ScimError;
 import org.apache.directory.scim.models.ScimMeta;
 import org.apache.directory.scim.models.ScimResponse;
@@ -75,7 +76,7 @@ public class UserResource {
   }
   
   @GET
-  public ScimResponse getUser( @QueryParam("attributes") String attributes,
+  public Response getUser( @QueryParam("attributes") String attributes,
                            @QueryParam("count") Integer count,
                            @QueryParam("filter") Filter filter,
                            @QueryParam("sortBy") String sortBy,
@@ -95,52 +96,57 @@ public class UserResource {
   @Path( "{id}" )
   public Response getUser(@PathParam("id") String id, @Context Request request, @Context UriInfo uriInfo) throws InstantiationException, IllegalAccessException
   {
-    // Set up cacheControl
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setMaxAge(86400);
-    
-    // Get the requested user
-    ScimUser scimUser = provider.getUser(id);
-    
     // The ResponseBuilder will be built at some point
     ResponseBuilder responseBuilder = null;
     
-    if(scimUser != null) {
-      // Generate the etag
-      EntityTag etag = new EntityTag("" + scimUser.hashCode());
-      responseBuilder = request.evaluatePreconditions(etag);
+    try {
       
-      if(responseBuilder != null) {
-        // The user object hasn't changed so just return the cache-control and etag
-        responseBuilder.cacheControl(cacheControl);
-        responseBuilder.tag(etag);
-      } else {
+      // Set up cacheControl
+      CacheControl cacheControl = new CacheControl();
+      cacheControl.setMaxAge(86400);
+      
+      // Get the requested user
+      ScimUser scimUser = provider.getUser(id);
+      
+      if(scimUser != null) {
+        // Generate the etag
+        EntityTag etag = new EntityTag("" + scimUser.hashCode());
+        responseBuilder = request.evaluatePreconditions(etag);
         
-        ScimMeta meta = scimUser.getMeta();
-        
-        // Get the absolute URL for this user
-        URI uri = uriInfo.getAbsolutePath();
-        System.out.println("Location: " + uri.toString());
-        if(uri != null) {
-          
-          // Copy the ETag into the meta block
-          meta.setVersion(etag.getValue());
-          
-          // Set the location element in the meta block
-          meta.setLocation(uri.toString());
-          scimUser.setMeta(meta);
-          
-          // Add the user as the response entity
-          responseBuilder = Response.ok(scimUser);
-          
-          // Set the cache control, location and eTag headers
+        if(responseBuilder != null) {
+          // The user object hasn't changed so just return the cache-control and etag
           responseBuilder.cacheControl(cacheControl);
-          responseBuilder.location(uri);
-          responseBuilder.tag(etag);        
-        }
-      }      
-    } else {
-      responseBuilder = Response.status(Status.NOT_FOUND);
+          responseBuilder.tag(etag);
+        } else {
+          
+          ScimMeta meta = scimUser.getMeta();
+          
+          // Get the absolute URL for this user
+          URI uri = uriInfo.getAbsolutePath();
+          System.out.println("Location: " + uri.toString());
+          if(uri != null) {
+            
+            // Copy the ETag into the meta block
+            meta.setVersion(etag.getValue());
+            
+            // Set the location element in the meta block
+            meta.setLocation(uri.toString());
+            scimUser.setMeta(meta);
+            
+            // Add the user as the response entity
+            responseBuilder = Response.ok(scimUser);
+            
+            // Set the cache control, location and eTag headers
+            responseBuilder.cacheControl(cacheControl);
+            responseBuilder.location(uri);
+            responseBuilder.tag(etag);        
+          }
+        }      
+      } else {
+        responseBuilder = Response.status(Status.NOT_FOUND);
+      }
+    } catch(ScimException e) {
+      
     }
 
     return responseBuilder.build(); 
@@ -148,7 +154,7 @@ public class UserResource {
     
   @PATCH
   @Path( "{id}" )
-  public ScimUser patchUser( @PathParam("id") String id, ScimUser scimUserIn ) throws InstantiationException, IllegalAccessException {
+  public Response patchUser( @PathParam("id") String id, ScimUser scimUserIn ) throws InstantiationException, IllegalAccessException {
     return provider.mergeUser(id, scimUserIn);
   }
 
@@ -257,9 +263,17 @@ public class UserResource {
   @POST
   @Path( ".search" )
   @Consumes( MediaType.APPLICATION_JSON )
-  public ScimResponse search(Query query) throws InstantiationException, IllegalAccessException {
+  public Response search(Query query) throws InstantiationException, IllegalAccessException {
     ProviderService provider = factory.getProvider();
-    return provider.findUsers(query);
+    ResponseBuilder responseBuilder = null;
+    try {
+      ScimResponse scimResponse = provider.findUsers(query);
+      responseBuilder = Response.ok(scimResponse);
+    } catch(ScimException e) {
+      responseBuilder = Response.status(e.g)
+    }
+    
+    return responseBuilder.build();
   }
 
 }

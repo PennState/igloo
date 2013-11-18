@@ -20,6 +20,7 @@ package org.apache.directory.scim;
 
 import java.util.List;
 
+import org.apache.directory.scim.exceptions.ScimException;
 import org.apache.directory.scim.models.ScimExtension;
 import org.apache.directory.scim.models.ScimGroup;
 import org.apache.directory.scim.models.ScimResponse;

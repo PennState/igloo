@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
-import org.apache.directory.scim.IllegalUrnException;
+import org.apache.directory.scim.exceptions.IllegalUrnException;
 
 /**
  * @author stevemoyer
