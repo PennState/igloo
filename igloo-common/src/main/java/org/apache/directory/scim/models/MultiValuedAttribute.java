@@ -2,12 +2,18 @@ package org.apache.directory.scim.models;
 
 import java.util.List;
 
+import javax.ws.rs.core.Response.Status;
+
+import org.apache.directory.scim.exceptions.ScimException;
+
 public abstract class MultiValuedAttribute {
 
   private String display;
   private String operation;
   private boolean primary = false;
 
+  public static final String MULTIPLE_PRIMARIES_ERROR = "Multiple entries were flagged as primary.  Only on primary is allowed per attribute";
+  
   /**
    * Returns the primary value
    * @param values
@@ -51,7 +57,7 @@ public abstract class MultiValuedAttribute {
     }
   }
   
-  static <T extends MultiValuedAttribute> void validatePrimaryUniqueness(List<T> values)
+  static <T extends MultiValuedAttribute> void validatePrimaryUniqueness(List<T> values) throws ScimException
   {
     boolean primaryFound = false;
     
@@ -63,7 +69,7 @@ public abstract class MultiValuedAttribute {
       }
       else if (t.isPrimary() && primaryFound == true)
       {
-        //throw new 
+        throw new ScimException(new ScimError("400", MULTIPLE_PRIMARIES_ERROR), Status.BAD_REQUEST);
       }
     }
   }

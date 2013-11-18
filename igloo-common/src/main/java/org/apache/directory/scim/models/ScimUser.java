@@ -1,7 +1,6 @@
 package org.apache.directory.scim.models;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -9,6 +8,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import org.apache.directory.scim.exceptions.ScimException;
 
 
 @XmlRootElement(name = "User")
@@ -145,8 +146,9 @@ public class ScimUser extends ScimResource {
   
   /**
    * @param addresses the addresses to set
+   * @throws ScimException 
    */
-  public void setAddresses(List<ScimAddress> addresses) {
+  public void setAddresses(List<ScimAddress> addresses) throws ScimException {
     
     MultiValuedAttribute.validatePrimaryUniqueness(addresses);
     this.addresses_ = addresses;
@@ -183,8 +185,9 @@ public class ScimUser extends ScimResource {
   
   /**
    * @param emails the emails to set
+   * @throws ScimException 
    */
-  public void setEmails(List<ScimEmail> emails) {
+  public void setEmails(List<ScimEmail> emails) throws ScimException {
     MultiValuedAttribute.validatePrimaryUniqueness(emails);
     this.emails_ = emails;
   }
@@ -219,8 +222,9 @@ public class ScimUser extends ScimResource {
   
   /**
    * @param entitlements the entitlements to set
+   * @throws ScimException 
    */
-  public void setEntitlements(List<ScimEntitlement> entitlements) {
+  public void setEntitlements(List<ScimEntitlement> entitlements) throws ScimException {
     MultiValuedAttribute.validatePrimaryUniqueness(entitlements);
     entitlements_ = entitlements;
   }
@@ -269,8 +273,9 @@ public class ScimUser extends ScimResource {
   
   /**
    * @param ims the ims to set
+   * @throws ScimException 
    */
-  public void setIms(List<ScimIm> ims) {
+  public void setIms(List<ScimIm> ims) throws ScimException {
     MultiValuedAttribute.validatePrimaryUniqueness(ims);
     this.ims_ = ims;
   }
@@ -361,8 +366,9 @@ public class ScimUser extends ScimResource {
   
   /**
    * @param phoneNumbers the phoneNumbers to set
+   * @throws ScimException 
    */
-  public void setPhoneNumbers(List<ScimPhoneNumber> phoneNumbers) {
+  public void setPhoneNumbers(List<ScimPhoneNumber> phoneNumbers) throws ScimException {
     MultiValuedAttribute.validatePrimaryUniqueness(phoneNumbers);
     this.phoneNumbers_ = phoneNumbers;
   }
@@ -394,8 +400,9 @@ public class ScimUser extends ScimResource {
   
   /**
    * @param photos the photos to set
+   * @throws ScimException 
    */
-  public void setPhotos(List<ScimPhoto> photos) {
+  public void setPhotos(List<ScimPhoto> photos) throws ScimException {
     MultiValuedAttribute.validatePrimaryUniqueness(photos);
     this.photos_ = photos;
   }
@@ -458,8 +465,9 @@ public class ScimUser extends ScimResource {
   
   /**
    * @param roles the roles to set
+   * @throws ScimException 
    */
-  public void setRoles(List<ScimRole> roles) {
+  public void setRoles(List<ScimRole> roles) throws ScimException {
     MultiValuedAttribute.validatePrimaryUniqueness(roles_);
     this.roles_ = roles;
   }
@@ -545,8 +553,9 @@ public class ScimUser extends ScimResource {
   
   /**
    * @param x509Certificates the x509Certificates to set
+   * @throws ScimException 
    */
-  public void setX509Certificates(List<ScimX509Certificate> x509Certificates) {
+  public void setX509Certificates(List<ScimX509Certificate> x509Certificates) throws ScimException {
     MultiValuedAttribute.validatePrimaryUniqueness(x509Certificates);
     this.x509Certificates_ = x509Certificates;
   }
