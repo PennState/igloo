@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -17,8 +18,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ScimError {
   
-  private static final List<String> schemas = Arrays.asList("urn:scim:schemas:core:2.0:Error");
+  @XmlElement(name = "schemas")
+  private final List<String> schemas = Arrays.asList("urn:scim:schemas:core:2.0:Error");
   
+  @XmlElement(name = "Errors")
   private List<ErrorTuple> errors = new ArrayList<ErrorTuple>();
   
   /**
@@ -26,7 +29,7 @@ public class ScimError {
    * @author stevemoyer
    *
    */
-  @XmlType(propOrder = {
+  @XmlType(name = "Errors", propOrder = {
     "description",
     "code"
   })

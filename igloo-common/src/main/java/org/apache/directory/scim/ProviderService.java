@@ -20,6 +20,7 @@ package org.apache.directory.scim;
 
 import java.util.List;
 
+import org.apache.directory.scim.exceptions.ScimException;
 import org.apache.directory.scim.models.ScimExtension;
 import org.apache.directory.scim.models.ScimGroup;
 import org.apache.directory.scim.models.ScimResponse;
@@ -33,20 +34,20 @@ import org.apache.directory.scim.search.Query;
 public interface ProviderService 
 {
   
+  ScimUser createUser( ScimUser user ) throws ScimException;
+  void deleteUser( String id ) throws ScimException;
+  ScimResponse findUsers( Query query ) throws ScimException;
+  ScimUser getUser( String id ) throws ScimException;
+  ScimUser mergeUser( String id, ScimUser user ) throws ScimException;
+  ScimUser replaceUser( String id, ScimUser user ) throws ScimException;
+  
+  ScimGroup createGroup( ScimGroup group ) throws ScimException;
+  void deleteGroup( String id ) throws ScimException;
+  ScimResponse findGroups( Query query ) throws ScimException;
+  ScimGroup getGroup( String id ) throws ScimException;
+  ScimGroup mergeGroup( String id, ScimGroup group ) throws ScimException;
+  ScimGroup replaceGroup( String id, ScimGroup group ) throws ScimException;
+  
   List<Class<? extends ScimExtension>> getExtensionClasses();
 
-  ScimUser createUser( ScimUser user );
-  void deleteUser( String id );
-  ScimResponse findUsers( Query query );
-  ScimUser getUser( String id );
-  ScimUser mergeUser( String id, ScimUser user );
-  ScimUser replaceUser( String id, ScimUser user );
-  
-  ScimGroup createGroup( ScimGroup group );
-  void deleteGroup( String id );
-  ScimResponse findGroups( Query query );
-  ScimGroup getGroup( String id );
-  ScimGroup mergeGroup( String id, ScimGroup group );
-  ScimGroup replaceGroup( String id, ScimGroup group );
-  
 }

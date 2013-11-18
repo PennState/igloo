@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.apache.directory.scim;
+package org.apache.directory.scim.exceptions;
 
 /**
  * @author stevemoyer
