@@ -1,11 +1,75 @@
 package org.apache.directory.scim.models;
 
+import java.util.List;
+
 public abstract class MultiValuedAttribute {
 
   private String display;
   private String operation;
   private boolean primary = false;
 
+  /**
+   * Returns the primary value
+   * @param values
+   * @return
+   */
+  static <T extends MultiValuedAttribute> T getPrimary(List<T> values)
+  {
+    T retVal = null;
+    
+    if (values != null)
+    {
+      for (T t : values)
+      {
+        if (t.isPrimary())
+        {
+          retVal = t;
+          break;
+        }
+      }
+    }
+    
+    return retVal;
+  }
+
+  static <T extends MultiValuedAttribute> void addValue(T newValue, List<T> values)
+  {
+    if (values != null)
+    {
+      if (newValue != null && newValue.isPrimary())
+      {
+        for (T t : values)
+        {
+          t.setPrimary(false);
+        }
+      }
+      
+      if (newValue != null)
+      {
+        values.add(newValue);
+      }
+    }
+  }
+  
+  static <T extends MultiValuedAttribute> void validatePrimaryUniqueness(List<T> values)
+  {
+    boolean primaryFound = false;
+    
+    for (T t : values)
+    {
+      if (t.isPrimary() && primaryFound == false)
+      {
+        primaryFound = true;
+      }
+      else if (t.isPrimary() && primaryFound == true)
+      {
+        //throw new 
+      }
+    }
+  }
+
+  
+  
   /**
    * @return the display
    */

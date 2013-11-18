@@ -130,29 +130,7 @@ public class ScimUser extends ScimResource {
    */
   public ScimAddress getPrimaryAddress()
   {
-    ScimAddress address = null;
-    if (addresses_.size() == 1)
-    {
-      address = addresses_.get(0);
-    }
-    else if (addresses_.size() > 1)
-    {
-      for (ScimAddress addr : addresses_)
-      {
-        if (addr.isPrimary())
-        {
-          address = addr;
-          break;
-        }
-      }
-      
-      if (address == null)
-      {
-        address = addresses_.get(0);
-      }
-    }
-    
-    return address;
+    return MultiValuedAttribute.getPrimary(addresses_);
   }
   
   public void addAddress(ScimAddress address)
@@ -162,30 +140,15 @@ public class ScimUser extends ScimResource {
       addresses_ = new ArrayList<ScimAddress>();
     }
     
-    //Remove any duplicates with this type and toggle primary if necessary
-    Iterator<ScimAddress> iterator = addresses_.iterator();
-    
-    while(iterator.hasNext())
-    {
-      ScimAddress sa = iterator.next();
-      
-      if (sa.getType() == address.getType())
-      {
-        iterator.remove();
-      }
-      else if (address.isPrimary())
-      {
-        sa.setPrimary(false);
-      }
-    }
-    
-    addresses_.add(address);
+    MultiValuedAttribute.addValue(address,  addresses_);
   }
   
   /**
    * @param addresses the addresses to set
    */
   public void setAddresses(List<ScimAddress> addresses) {
+    
+    MultiValuedAttribute.validatePrimaryUniqueness(addresses);
     this.addresses_ = addresses;
   }
   
@@ -211,10 +174,32 @@ public class ScimUser extends ScimResource {
   }
   
   /**
+   * @return The primary email address or null if not set
+   */
+  public ScimEmail getPrimaryEmail()
+  {
+    return MultiValuedAttribute.getPrimary(emails_);  
+  }
+  
+  /**
    * @param emails the emails to set
    */
   public void setEmails(List<ScimEmail> emails) {
+    MultiValuedAttribute.validatePrimaryUniqueness(emails);
     this.emails_ = emails;
+  }
+  
+  /**
+   * @param email the email to add
+   */
+  public void addEmail(ScimEmail email)
+  {
+    if (emails_ == null)
+    {
+      emails_ = new ArrayList<ScimEmail>();
+    }
+    
+    MultiValuedAttribute.addValue(email, emails_);  
   }
   
   /**
@@ -225,10 +210,32 @@ public class ScimUser extends ScimResource {
   }
   
   /**
+   * @return the primary entitlement or null in not set
+   */
+  public ScimEntitlement getPrimaryEntitlement()
+  {
+    return MultiValuedAttribute.getPrimary(entitlements_);
+  }
+  
+  /**
    * @param entitlements the entitlements to set
    */
   public void setEntitlements(List<ScimEntitlement> entitlements) {
-    this.entitlements_ = entitlements;
+    MultiValuedAttribute.validatePrimaryUniqueness(entitlements);
+    entitlements_ = entitlements;
+  }
+  
+  /**
+   * @param entitlement the entitlement to be added
+   */
+  public void addEntitlement(ScimEntitlement entitlement)
+  {
+    if (entitlements_ == null)
+    {
+      entitlements_ = new ArrayList<ScimEntitlement>();
+    }
+    
+    MultiValuedAttribute.addValue(entitlement, entitlements_);  
   }
   
   /**
@@ -253,10 +260,32 @@ public class ScimUser extends ScimResource {
   }
   
   /**
+   * @return the primary IM or null if not set
+   */
+  public ScimIm getPrimaryIm()
+  {
+    return MultiValuedAttribute.getPrimary(ims_);
+  }
+  
+  /**
    * @param ims the ims to set
    */
   public void setIms(List<ScimIm> ims) {
+    MultiValuedAttribute.validatePrimaryUniqueness(ims);
     this.ims_ = ims;
+  }
+  
+  /**
+   * @param im the im to add
+   */
+  public void addIm(ScimIm im)
+  {
+    if (ims_ == null)
+    {
+      ims_ = new ArrayList<ScimIm>();
+    }
+    
+    MultiValuedAttribute.addValue(im,  ims_);
   }
   
   /**
@@ -323,10 +352,29 @@ public class ScimUser extends ScimResource {
   }
   
   /**
+   * @return the primary phone number or null if not set
+   */
+  public ScimPhoneNumber getPrimaryPhoneNumber()
+  {
+    return MultiValuedAttribute.getPrimary(phoneNumbers_);
+  }
+  
+  /**
    * @param phoneNumbers the phoneNumbers to set
    */
   public void setPhoneNumbers(List<ScimPhoneNumber> phoneNumbers) {
+    MultiValuedAttribute.validatePrimaryUniqueness(phoneNumbers);
     this.phoneNumbers_ = phoneNumbers;
+  }
+  
+  public void addPhoneNumber(ScimPhoneNumber number)
+  {
+    if (phoneNumbers_ == null)
+    {
+      phoneNumbers_ = new ArrayList<ScimPhoneNumber>();
+    }
+    
+    MultiValuedAttribute.addValue(number, phoneNumbers_);
   }
   
   /**
@@ -337,10 +385,32 @@ public class ScimUser extends ScimResource {
   }
   
   /**
+   * @return the primary photo or null if not set
+   */
+  public ScimPhoto getPrimaryPhoto()
+  {
+    return MultiValuedAttribute.getPrimary(photos_);
+  }
+  
+  /**
    * @param photos the photos to set
    */
   public void setPhotos(List<ScimPhoto> photos) {
+    MultiValuedAttribute.validatePrimaryUniqueness(photos);
     this.photos_ = photos;
+  }
+  
+  /**
+   * @param photo the photo to add
+   */
+  public void addPhoto(ScimPhoto photo)
+  {
+    if (photos_ == null)
+    {
+      photos_ = new ArrayList<ScimPhoto>();
+    }
+    
+    MultiValuedAttribute.addValue(photo, photos_);
   }
   
   /**
@@ -379,10 +449,27 @@ public class ScimUser extends ScimResource {
   }
   
   /**
+   * @return the primary role or null if not set
+   */
+  public ScimRole getPrimaryRole()
+  {
+    return MultiValuedAttribute.getPrimary(roles_);
+  }
+  
+  /**
    * @param roles the roles to set
    */
   public void setRoles(List<ScimRole> roles) {
+    MultiValuedAttribute.validatePrimaryUniqueness(roles_);
     this.roles_ = roles;
+  }
+  
+  /**
+   * @param role the role to be added
+   */
+  public void addRole(ScimRole role)
+  {
+    MultiValuedAttribute.addValue(role, roles_);
   }
   
   /**
@@ -449,10 +536,29 @@ public class ScimUser extends ScimResource {
   }
   
   /**
+   * @return the primary certificate or null if not set
+   */
+  public ScimX509Certificate getPrimaryX509Certificate()
+  {
+    return MultiValuedAttribute.getPrimary(x509Certificates_);
+  }
+  
+  /**
    * @param x509Certificates the x509Certificates to set
    */
   public void setX509Certificates(List<ScimX509Certificate> x509Certificates) {
+    MultiValuedAttribute.validatePrimaryUniqueness(x509Certificates);
     this.x509Certificates_ = x509Certificates;
+  }
+  
+  public void addX509Certificate(ScimX509Certificate certificate)
+  {
+    if (x509Certificates_ == null)
+    {
+      x509Certificates_ = new ArrayList<ScimX509Certificate>();
+    }
+    
+    MultiValuedAttribute.addValue(certificate,  x509Certificates_);
   }
 
   /* (non-Javadoc)
