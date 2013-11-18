@@ -19,8 +19,9 @@ import javax.xml.bind.annotation.XmlType;
 public class ScimError {
   
   @XmlElement(name = "schemas")
-  private static final List<String> schemas = Arrays.asList("urn:scim:schemas:core:2.0:Error");
+  private final List<String> schemas = Arrays.asList("urn:scim:schemas:core:2.0:Error");
   
+  @XmlElement(name = "Errors")
   private List<ErrorTuple> errors = new ArrayList<ErrorTuple>();
   
   /**
