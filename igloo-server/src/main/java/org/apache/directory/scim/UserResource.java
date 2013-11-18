@@ -62,9 +62,11 @@ public class UserResource {
   
   private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
   
-  private static final String ERROR_CODE_STRING_BAD_REQUEST = Integer.toString(Status.BAD_REQUEST.getStatusCode()); 
+  private static final String ERROR_CODE_STRING_BAD_REQUEST = Integer.toString(Status.BAD_REQUEST.getStatusCode());
+  private static final String ERROR_CODE_STRING_CONFLICT = Integer.toString(Status.CONFLICT.getStatusCode());
   
-  private static final String ERROR_DESCRIPTION_BAD_REQUEST = "Resource modification requires \"If-Match\" request header";
+  private static final String ERROR_DESCRIPTION_MISSING_IF_MATCH = "Resource modification requires \"If-Match\" request header";
+  private static final String ERROR_DESCRIPTION_UNMATCHED_IF_MATCH = "Resource modification requires that the \"If-Match\" request header contains the current ETag";
   
   private EscimoProviderFactory factory;
   private ProviderService provider;
@@ -180,31 +182,27 @@ public class UserResource {
       // Get the requested user
       ScimUser scimUserOut = provider.createUser(scimUserIn);
       
-      if(scimUserOut != null) {
-        // Generate the etag
-        EntityTag etag = new EntityTag("" + scimUserOut.hashCode());
+      // Generate the etag
+      EntityTag etag = new EntityTag("" + scimUserOut.hashCode());
+      
+      ScimMeta meta = scimUserOut.getMeta();
+      
+      // Get the absolute URL for this user
+      URI uri = uriInfo.getAbsolutePath();
+      LOGGER.debug("Location: " + uri.toString());
+      if(uri != null) {
         
-        ScimMeta meta = scimUserOut.getMeta();
+        // Copy the ETag into the meta block
+        meta.setVersion(etag.getValue());
         
-        // Get the absolute URL for this user
-        URI uri = uriInfo.getAbsolutePath();
-        LOGGER.debug("Location: " + uri.toString());
-        if(uri != null) {
-          
-          // Copy the ETag into the meta block
-          meta.setVersion(etag.getValue());
-          
-          // Set the location element in the meta block
-          meta.setLocation(uri.toString());
-          scimUserOut.setMeta(meta);
-        }
-         
-        // Sent the created ScimUser as the entity
-        responseBuilder = Response.ok(scimUserOut);
-        responseBuilder.status(Status.CREATED);
-      } else {
-        responseBuilder = Response.status(Status.CONFLICT);
+        // Set the location element in the meta block
+        meta.setLocation(uri.toString());
+        scimUserOut.setMeta(meta);
       }
+       
+      // Sent the created ScimUser as the entity
+      responseBuilder = Response.ok(scimUserOut);
+      responseBuilder.status(Status.CREATED);
     } catch(ScimException e) {
       responseBuilder = Response.status(e.getStatus());
       responseBuilder.entity(e.getError());
@@ -227,8 +225,7 @@ public class UserResource {
       // Make sure the user has sent an ETag via an If-Match request header
       if(headers.getRequestHeader("If-Match") == null) {
         responseBuilder = Response.status(Status.BAD_REQUEST);
-        //responseBuilder.entity("Resource modification requires \"If-Match\" request header");
-        responseBuilder.entity(new ScimError(ERROR_CODE_STRING_BAD_REQUEST, ERROR_DESCRIPTION_BAD_REQUEST));
+        responseBuilder.entity(new ScimError(ERROR_CODE_STRING_BAD_REQUEST, ERROR_DESCRIPTION_MISSING_IF_MATCH));
       } else {
         
         // Get the requested user
@@ -241,35 +238,35 @@ public class UserResource {
         
         // If the ResponseBuilder exists, a precondition has failed
         if(responseBuilder != null) {
-          responseBuilder.entity("Resource modification requires that the \"If-Match\" request header contains the current ETag");
+          responseBuilder = Response.status(Status.BAD_REQUEST);
+          responseBuilder.entity(new ScimError(ERROR_CODE_STRING_CONFLICT, ERROR_DESCRIPTION_UNMATCHED_IF_MATCH));
           responseBuilder.cacheControl(cacheControl);
           responseBuilder.tag(existingEtag);       
         } else {
+          
+          // Replace the user and get the new value back
           ScimUser scimUserOut = provider.replaceUser(id, scimUserIn);
-          if(scimUserOut != null) {
-            // Generate the etag
-            EntityTag etag = new EntityTag("" + scimUserOut.hashCode());
+          
+          // Generate the etag
+          EntityTag etag = new EntityTag("" + scimUserOut.hashCode());
+          
+          ScimMeta meta = scimUserOut.getMeta();
+          
+          // Get the absolute URL for this user
+          URI uri = uriInfo.getAbsolutePath();
+          LOGGER.debug("Location: " + uri.toString());
+          if(uri != null) {
             
-            ScimMeta meta = scimUserOut.getMeta();
+            // Copy the ETag into the meta block
+            meta.setVersion(etag.getValue());
             
-            // Get the absolute URL for this user
-            URI uri = uriInfo.getAbsolutePath();
-            LOGGER.debug("Location: " + uri.toString());
-            if(uri != null) {
-              
-              // Copy the ETag into the meta block
-              meta.setVersion(etag.getValue());
-              
-              // Set the location element in the meta block
-              meta.setLocation(uri.toString());
-              scimUserOut.setMeta(meta);
-            }
-             
-            // Sent the created ScimUser as the entity
-            responseBuilder = Response.ok(scimUserOut);
-          } else {
-            responseBuilder = Response.status(Status.CONFLICT);
+            // Set the location element in the meta block
+            meta.setLocation(uri.toString());
+            scimUserOut.setMeta(meta);
           }
+           
+          // Sent the created ScimUser as the entity
+          responseBuilder = Response.ok(scimUserOut);
         }
       }
     } catch(ScimException e) {
