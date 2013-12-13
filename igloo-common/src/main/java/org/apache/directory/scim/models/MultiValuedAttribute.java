@@ -58,7 +58,12 @@ public abstract class MultiValuedAttribute {
   }
   
   static <T extends MultiValuedAttribute> void validatePrimaryUniqueness(List<T> values) throws ScimException
-  {
+  { 
+    if (values == null)
+    {
+      return;
+    }
+    
     boolean primaryFound = false;
     
     for (T t : values)
