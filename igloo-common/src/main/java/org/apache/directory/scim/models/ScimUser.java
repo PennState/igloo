@@ -477,6 +477,11 @@ public class ScimUser extends ScimResource {
    */
   public void addRole(ScimRole role)
   {
+    if (roles_ == null)
+    {
+      roles_ = new ArrayList<ScimRole>();
+    }
+    
     MultiValuedAttribute.addValue(role, roles_);
   }
   
