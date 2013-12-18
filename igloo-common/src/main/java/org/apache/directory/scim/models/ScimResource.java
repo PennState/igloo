@@ -75,7 +75,6 @@ public abstract class ScimResource {
     return extension;
   }
   
-  @XmlTransient 
   public void addExtension(String key, ScimExtension extension)
   {
     if (extensions == null)
