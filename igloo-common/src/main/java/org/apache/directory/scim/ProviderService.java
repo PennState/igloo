@@ -43,7 +43,7 @@ public interface ProviderService
   
   ScimGroup createGroup( ScimGroup group ) throws ScimException;
   void deleteGroup( String id ) throws ScimException;
-  ScimResponse<ScimUser> findGroups( Query query ) throws ScimException;
+  ScimResponse<ScimGroup> findGroups( Query query ) throws ScimException;
   ScimGroup getGroup( String id ) throws ScimException;
   ScimGroup mergeGroup( String id, ScimGroup group ) throws ScimException;
   ScimGroup replaceGroup( String id, ScimGroup group ) throws ScimException;
