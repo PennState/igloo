@@ -84,5 +84,9 @@ public class ScimError {
   public void addError(String code, String description) {
     errors.add(new ErrorTuple(code, description));
   }
+  
+  public void addError(ScimError error) {
+    this.errors.addAll(error.errors);
+  }
 
 }
