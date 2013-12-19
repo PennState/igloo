@@ -89,4 +89,17 @@ public class ScimError {
     this.errors.addAll(error.errors);
   }
 
+  @Override
+  public String toString()
+  {
+    StringBuilder sb = new StringBuilder();
+    for (ErrorTuple et : errors)
+    {
+      sb.append("Error: ");
+      sb.append(et.getDescription());
+      sb.append("\n");
+    }
+    
+    return sb.toString();
+  }
 }
