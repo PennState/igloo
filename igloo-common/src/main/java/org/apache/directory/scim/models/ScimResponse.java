@@ -17,13 +17,13 @@ import javax.xml.bind.annotation.XmlType;
     "Resources"
 })
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ScimResponse {
+public class ScimResponse<T extends ScimResource> {
   
   @XmlElement(name = "itemsPerPage")
   private int itemsPerPage_;
   
   @XmlElement(name = "Resources")
-  private List<? extends ScimResource> resources_;
+  private List<T> resources_;
   
   @XmlElement(name = "schemas")
   private List<String> schemas_;
@@ -51,14 +51,14 @@ public class ScimResponse {
   /**
    * @return the resources
    */
-  public List<? extends ScimResource> getResources() {
+  public List<T> getResources() {
     return resources_;
   }
 
   /**
    * @param resources the resources to set
    */
-  public void setResources(List<? extends ScimResource> resources) {
+  public void setResources(List<T> resources) {
     this.resources_ = resources;
   }
 

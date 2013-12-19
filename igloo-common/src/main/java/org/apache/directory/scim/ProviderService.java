@@ -36,14 +36,14 @@ public interface ProviderService
   
   ScimUser createUser( ScimUser user ) throws ScimException;
   void deleteUser( String id ) throws ScimException;
-  ScimResponse findUsers( Query query ) throws ScimException;
+  ScimResponse<ScimUser> findUsers( Query query ) throws ScimException;
   ScimUser getUser( String id ) throws ScimException;
   ScimUser mergeUser( String id, ScimUser user ) throws ScimException;
   ScimUser replaceUser( String id, ScimUser user ) throws ScimException;
   
   ScimGroup createGroup( ScimGroup group ) throws ScimException;
   void deleteGroup( String id ) throws ScimException;
-  ScimResponse findGroups( Query query ) throws ScimException;
+  ScimResponse<ScimUser> findGroups( Query query ) throws ScimException;
   ScimGroup getGroup( String id ) throws ScimException;
   ScimGroup mergeGroup( String id, ScimGroup group ) throws ScimException;
   ScimGroup replaceGroup( String id, ScimGroup group ) throws ScimException;
