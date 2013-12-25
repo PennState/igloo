@@ -86,6 +86,12 @@ public class ScimError {
   }
   
   public void addError(ScimError error) {
+    //This is to allow chaining without risking an NPE
+    if (error == null)
+    {
+      return;
+    }
+    
     this.errors.addAll(error.errors);
   }
 
