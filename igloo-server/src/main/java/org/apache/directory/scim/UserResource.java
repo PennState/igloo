@@ -19,6 +19,7 @@
 package org.apache.directory.scim;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -64,12 +65,17 @@ public class UserResource {
   
   private static final String ERROR_CODE_STRING_BAD_REQUEST = Integer.toString(Status.BAD_REQUEST.getStatusCode());
   private static final String ERROR_CODE_STRING_CONFLICT = Integer.toString(Status.CONFLICT.getStatusCode());
+  private static final String SERVER_ERROR_CODE = "500";
   
   private static final String ERROR_DESCRIPTION_MISSING_IF_MATCH = "Resource modification requires \"If-Match\" request header";
   private static final String ERROR_DESCRIPTION_UNMATCHED_IF_MATCH = "Resource modification requires that the \"If-Match\" request header contains the current ETag";
+  private static final String ERROR_INVALID_URI_MESSAGE = "Unable to extract the URI from the URI Info";
   
   private EscimoProviderFactory factory;
   private ProviderService provider;
+  
+  @Context
+  private UriInfo uriInfo;
   
   @Context
   public void setServletContext(ServletContext context) throws InstantiationException, IllegalAccessException {
@@ -96,7 +102,7 @@ public class UserResource {
   
   @GET
   @Path( "{id}" )
-  public Response getUser(@PathParam("id") String id, @Context Request request, @Context UriInfo uriInfo) throws InstantiationException, IllegalAccessException
+  public Response getUser(@PathParam("id") String id, @Context Request request) throws InstantiationException, IllegalAccessException
   {
     // The ResponseBuilder will be built at some point
     ResponseBuilder responseBuilder = null;
@@ -110,38 +116,24 @@ public class UserResource {
       ScimUser scimUser = provider.getUser(id);
       
       if(scimUser != null) {
+        URI uri = uriInfo.getAbsolutePath();
+        setMeta(scimUser);
         // Generate the etag
-        EntityTag etag = new EntityTag("" + scimUser.hashCode());
+        EntityTag etag = new EntityTag("" + scimUser.getMeta().getVersion());
         responseBuilder = request.evaluatePreconditions(etag);
         
         if(responseBuilder != null) {
           // The user object hasn't changed so just return the cache-control and etag
           responseBuilder.cacheControl(cacheControl);
           responseBuilder.tag(etag);
-        } else {
+        } else {          
+          // Add the user as the response entity
+          responseBuilder = Response.ok(scimUser);
           
-          ScimMeta meta = scimUser.getMeta();
-          
-          // Get the absolute URL for this user
-          URI uri = uriInfo.getAbsolutePath();
-          System.out.println("Location: " + uri.toString());
-          if(uri != null) {
-            
-            // Copy the ETag into the meta block
-            meta.setVersion(etag.getValue());
-            
-            // Set the location element in the meta block
-            meta.setLocation(uri.toString());
-            scimUser.setMeta(meta);
-            
-            // Add the user as the response entity
-            responseBuilder = Response.ok(scimUser);
-            
-            // Set the cache control, location and eTag headers
-            responseBuilder.cacheControl(cacheControl);
-            responseBuilder.location(uri);
-            responseBuilder.tag(etag);        
-          }
+          // Set the cache control, location and eTag headers
+          responseBuilder.cacheControl(cacheControl);
+          responseBuilder.location(uri);
+          responseBuilder.tag(etag);        
         }      
       } else {
         responseBuilder = Response.status(Status.NOT_FOUND);
@@ -283,7 +275,18 @@ public class UserResource {
   public Response search(Query query) throws InstantiationException, IllegalAccessException {
     ResponseBuilder responseBuilder = null;
     try {
-      ScimResponse scimResponse = provider.findUsers(query);
+      ScimResponse<ScimUser> scimResponse = provider.findUsers(query);
+      
+      List<ScimUser> scimUsers = scimResponse.getResources();
+            
+      try {
+        for (ScimUser scimUser : scimUsers) {
+          setMeta(scimUser);
+        }
+      } catch(ScimException e) {
+        
+      }
+      
       responseBuilder = Response.ok(scimResponse);
     } catch(ScimException e) {
       responseBuilder = Response.status(e.getStatus());
@@ -293,4 +296,16 @@ public class UserResource {
     return responseBuilder.build();
   }
 
+  private void setMeta(ScimUser scimUser) throws ScimException {
+    ScimMeta meta = scimUser.getMeta();
+        
+    if(uriInfo != null) {
+      meta.setVersion(Integer.toString(scimUser.hashCode()));
+      meta.setLocation(uriInfo.getAbsolutePath().toString());
+    }
+    else {
+      ScimError error = new ScimError(SERVER_ERROR_CODE, ERROR_INVALID_URI_MESSAGE);
+      throw new ScimException(error, Status.INTERNAL_SERVER_ERROR);
+    }     
+  }
 }
