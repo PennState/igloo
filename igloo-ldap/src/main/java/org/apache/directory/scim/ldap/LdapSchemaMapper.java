@@ -98,9 +98,7 @@ public class LdapSchemaMapper implements SchemaMapper
             if ( root.elements().isEmpty() )
             {
                throw new IllegalStateException( "Invalid schema mapping file" ); 
-            }
-            
-            Element elmUser = root.element( "user" );
+            }            
         }
         catch ( Exception e )
         {
