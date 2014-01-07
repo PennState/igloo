@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlType;
 public class ScimMeta {
 
   private static final String META_TIMESTAMP_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-  //private static final DateFormat META_TIMESTAMP_FORMAT = new SimpleDateFormat(META_TIMESTAMP_PATTERN);
   
   private List<String> attributes;
   private Date created;
