@@ -96,11 +96,6 @@ public class FilterParser {
     return (!token.startsWith("\"") || !token.endsWith("\"")) && !isOperator(token);
   }
   
-  private boolean isAttributeValue(String token) {
-    return (token.startsWith("\"") || token.endsWith("\"")) && !isOperator(token);
-        
-  }
-  
   private boolean isOperator(String token) {
     if(LOGGER.isDebugEnabled()) {
       LOGGER.debug("isOperator() - isAttributeOperator: " + AttributeOperator.isAttributeOperator(token));
