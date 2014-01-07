@@ -181,9 +181,10 @@ public class UserResource {
       
       // Get the absolute URL for this user
       URI uri = uriInfo.getAbsolutePath();
-      LOGGER.debug("Location: " + uri.toString());
+
       if(uri != null) {
-        
+        LOGGER.debug("Location: " + uri.toString());
+
         // Copy the ETag into the meta block
         meta.setVersion(etag.getValue());
         
@@ -246,9 +247,9 @@ public class UserResource {
           
           // Get the absolute URL for this user
           URI uri = uriInfo.getAbsolutePath();
-          LOGGER.debug("Location: " + uri.toString());
           if(uri != null) {
-            
+            LOGGER.debug("Location: " + uri.toString());
+
             // Copy the ETag into the meta block
             meta.setVersion(etag.getValue());
             
