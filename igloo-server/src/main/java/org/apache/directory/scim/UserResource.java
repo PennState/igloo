@@ -279,13 +279,11 @@ public class UserResource {
       ScimResponse<ScimUser> scimResponse = provider.findUsers(query);
       
       List<ScimUser> scimUsers = scimResponse.getResources();
-            
-      try {
+           
+      if(scimUsers != null) {
         for (ScimUser scimUser : scimUsers) {
           setMeta(scimUser);
         }
-      } catch(ScimException e) {
-        
       }
       
       responseBuilder = Response.ok(scimResponse);
