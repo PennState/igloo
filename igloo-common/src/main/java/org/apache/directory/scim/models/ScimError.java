@@ -34,7 +34,7 @@ public class ScimError {
     "code"
   })
   @XmlAccessorType(XmlAccessType.FIELD)
-  private final class ErrorTuple {
+  public final class ErrorTuple {
     
     private String code;
     private String description;
