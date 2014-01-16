@@ -25,5 +25,16 @@ public class ScimException extends Exception {
   public Status getStatus() {
     return status;
   }
+  
+  @Override
+  public String getMessage()
+  {
+    if (error != null)
+    {
+      return error.toString();
+    }
+    
+    return super.getMessage();
+  }
 
 }
