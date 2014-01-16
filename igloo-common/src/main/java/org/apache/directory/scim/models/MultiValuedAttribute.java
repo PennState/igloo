@@ -68,13 +68,15 @@ public abstract class MultiValuedAttribute {
     
     for (T t : values)
     {
-      if (t.isPrimary() && primaryFound == false)
-      {
-        primaryFound = true;
-      }
-      else if (t.isPrimary() && primaryFound == true)
-      {
-        throw new ScimException(new ScimError("400", MULTIPLE_PRIMARIES_ERROR), Status.BAD_REQUEST);
+      if(t != null) {
+        if (t.isPrimary() && primaryFound == false)
+        {
+          primaryFound = true;
+        }
+        else if (t.isPrimary() && primaryFound == true)
+        {
+          throw new ScimException(new ScimError("400", MULTIPLE_PRIMARIES_ERROR), Status.BAD_REQUEST);
+        }
       }
     }
   }
