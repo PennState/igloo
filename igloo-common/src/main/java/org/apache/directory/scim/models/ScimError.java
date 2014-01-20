@@ -39,6 +39,10 @@ public class ScimError {
     private String code;
     private String description;
     
+    public ErrorTuple() {
+      // Needed by Object mapper
+    }
+    
     public ErrorTuple(String code, String description) {
       this.code = code;
       this.description = description;
