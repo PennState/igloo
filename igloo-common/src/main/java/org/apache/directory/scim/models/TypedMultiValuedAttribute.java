@@ -1,5 +1,6 @@
 package org.apache.directory.scim.models;
 
+
 public abstract class TypedMultiValuedAttribute<T extends ScimType> extends MultiValuedAttribute {
 
   private T type;
