@@ -11,11 +11,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "Error")
-@XmlType(name = "Error", propOrder = {
-    "schemas",
-    "Errors"
-})
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Error")
+@XmlAccessorType(XmlAccessType.NONE)
 public class ScimError {
   
   @XmlElement(name = "schemas")
@@ -33,10 +30,12 @@ public class ScimError {
     "description",
     "code"
   })
-  @XmlAccessorType(XmlAccessType.FIELD)
+  @XmlAccessorType(XmlAccessType.NONE)
   public static final class ErrorTuple {
     
+    @XmlElement(name="code")
     private String code;
+    @XmlElement(name="description")
     private String description;
     
     public ErrorTuple() {
