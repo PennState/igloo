@@ -307,4 +307,5 @@ public class UserResource {
       throw new ScimException(error, Status.INTERNAL_SERVER_ERROR);
     }     
   }
+  
 }
