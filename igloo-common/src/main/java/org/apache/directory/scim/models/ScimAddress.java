@@ -14,15 +14,8 @@ import org.apache.directory.scim.models.enums.ScimAddressType;
  * @author stevemoyer
  *
  */
-@XmlType(name = "address", propOrder = {
-    "formatted",
-    "streetAddress",
-    "locality",
-    "region",
-    "postalCode",
-    "country"
-})
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "address")
+@XmlAccessorType(XmlAccessType.NONE)
 public class ScimAddress extends TypedMultiValuedAttribute<ScimAddressType> {
   
   @XmlElement(name = "country")
