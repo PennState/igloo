@@ -5,8 +5,12 @@ import java.util.Map;
 
 import org.apache.directory.scim.models.ScimExtension;
 import org.apache.directory.scim.models.ScimResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ScimExtensionRegistry {
+  
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScimExtensionRegistry.class);
   
   private static final ScimExtensionRegistry INSTANCE = new ScimExtensionRegistry();
   
@@ -36,9 +40,9 @@ public class ScimExtensionRegistry {
     String urn = scimExtension.getUrn().toString();
     Class<? extends ScimExtension> extensionClass = scimExtension.getClass();
     
-    System.out.println("Registering extension for URN: " + urn);
-    System.out.println("    (associated resource class: " + resourceClass.getSimpleName() + ")");
-    System.out.println("    (associated extension class: " + extensionClass.getSimpleName() + ")");
+    LOGGER.debug("Registering extension for URN: " + urn);
+    LOGGER.debug("    (associated resource class: " + resourceClass.getSimpleName() + ")");
+    LOGGER.debug("    (associated extension class: " + extensionClass.getSimpleName() + ")");
     
     Map<String, Class<? extends ScimExtension>> resourceMap = registry.get(resourceClass);
     if(resourceMap == null) {
