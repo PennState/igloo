@@ -105,9 +105,9 @@ public class FilterLexer implements Iterator<String> {
   }
 
   protected void logTokens(List<String> tokens) {
-    LOGGER.info("Tokens: ");
+    LOGGER.debug("Tokens: ");
     for(String token: tokens) {
-      LOGGER.info("    " + token);
+      LOGGER.debug("    " + token);
     }    
   }
   

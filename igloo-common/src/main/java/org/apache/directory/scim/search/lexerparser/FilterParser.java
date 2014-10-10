@@ -25,7 +25,7 @@ public class FilterParser {
   }
   
   public Expression<?> parse() throws FilterParseException {
-    LOGGER.info("Filter string: " + lexer_.getFilter());
+    LOGGER.debug("Filter string: " + lexer_.getFilter());
     //Expression<?> expression = recursiveParse(null);
     Expression<?> expression = leftToRightParse(null);
     logExpression("Filter expression", expression);
@@ -55,7 +55,7 @@ public class FilterParser {
     logExpression("Expression in", expressionIn);
     if(lexer_.hasNext()) {
       String token = lexer_.next();
-      LOGGER.info("Current token: " + token);
+      LOGGER.debug("Current token: " + token);
       if(isAttributeName(token)) {
         SimpleExpression attributeExpression = parseAttributeExpression(token);
         expressionOut = recursiveParse(attributeExpression);
@@ -116,7 +116,7 @@ public class FilterParser {
     if(expression != null) {
       expressionString = expression.toString("");
     }
-    LOGGER.info(title + ":\n" + expressionString);
+    LOGGER.debug(title + ":\n" + expressionString);
   }
   
   private SimpleExpression parseAttributeExpression(String attributeName) throws FilterParseException {
@@ -157,19 +157,19 @@ public class FilterParser {
     Expression<?> groupedExpression = leftToRightParse(null);
     logExpression("Grouped expression", groupedExpression);
     if(negativeGroup) {
-      LOGGER.info("NP");
+      LOGGER.debug("NP");
       CompoundExpression notExpression = new CompoundExpression();
       notExpression.setOperator(GroupingOperator.NP);
       notExpression.setRight(groupedExpression);
       expressionOut = notExpression;
     } else {
-      LOGGER.info("OP");
+      LOGGER.debug("OP");
       expressionOut = groupedExpression;
     }
     if(LOGGER.isDebugEnabled()) {
-      LOGGER.info("***** Group start *****");
+      LOGGER.debug("***** Group start *****");
       logExpression("Grouped expression", expressionOut);
-      LOGGER.info("***** Group end *****");
+      LOGGER.debug("***** Group end *****");
     }   
     logExpression("Grouped expression", expressionOut);
     return expressionOut;
@@ -178,7 +178,7 @@ public class FilterParser {
   private CompoundExpression parseCompoundExpression(Expression<?> leftExpression, String operatorString) throws FilterParseException {
     CompoundExpression compoundExpression = new CompoundExpression();
     LogicalOperator operator = LogicalOperator.valueOf(operatorString);
-    LOGGER.info(operator.name());
+    LOGGER.debug(operator.name());
     compoundExpression.setOperator(operator);
     compoundExpression.setLeft(leftExpression);
     
@@ -186,12 +186,12 @@ public class FilterParser {
     Expression<?> rightExpression = leftToRightParse(null);
     compoundExpression.setRight(rightExpression);
     if(LOGGER.isDebugEnabled()) {
-      LOGGER.info("***** LogicalOperator start *****");
-      LOGGER.info("LogicalOperator: " + operator.name());
+      LOGGER.debug("***** LogicalOperator start *****");
+      LOGGER.debug("LogicalOperator: " + operator.name());
       logExpression("LeftExpression", leftExpression);
       logExpression("Right expression", rightExpression);
       logExpression("Logical expression", compoundExpression);
-      LOGGER.info("***** LogicalOperator end *****");
+      LOGGER.debug("***** LogicalOperator end *****");
     }
     return compoundExpression;
   }

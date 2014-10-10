@@ -58,12 +58,12 @@ public class EscimoContextListener implements ServletContextListener {
    */
   @Override
   public void contextInitialized(ServletContextEvent servletContextEvent) {
-    LOGGER.info("Context Initialized Event");
+    LOGGER.debug("Context Initialized Event");
     
     ServletContext context = servletContextEvent.getServletContext();
     
     // Get the properties location
-    LOGGER.info("Reading the eSCIMo properties location from web.xml");
+    LOGGER.debug("Reading the eSCIMo properties location from web.xml");
     String propertiesLocation = context.getInitParameter("propertiesLocation");
     if(propertiesLocation == null) {
       LOGGER.error(EXCEPTION_NO_CONTEXTPARAM);
@@ -74,7 +74,7 @@ public class EscimoContextListener implements ServletContextListener {
     Properties properties = new Properties();
     try {
       properties.load(context.getResourceAsStream(propertiesLocation));
-      LOGGER.info("Saving the eSCIMo properties as a context attribute");
+      LOGGER.debug("Saving the eSCIMo properties as a context attribute");
       context.setAttribute("escimoProperties", properties);
     } catch (IOException e) {
       LOGGER.error(EXCEPTION_PROPERTIES_FILE_NOT_FOUND + ": " + propertiesLocation);

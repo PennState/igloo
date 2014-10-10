@@ -26,7 +26,7 @@ public class PrefixFilterLexer extends FilterLexer {
   }
 
   protected List<String> convertFromInfixToPrefix(List<String> tokens) {
-    LOGGER.info("Converting to prefix form");
+    LOGGER.debug("Converting to prefix form");
     logTokens(tokens);
     // Loop through tokens to find attribute operators
     for(int i = 0; i < tokens.size(); i++) {
@@ -34,14 +34,14 @@ public class PrefixFilterLexer extends FilterLexer {
       AttributeOperator operator = null;
       try {
         operator = AttributeOperator.valueOf(token.toUpperCase());
-        LOGGER.info("    Token: " + token + ", AttributeOperator: true");
-        LOGGER.info("    AttributeOperator is one-operand: " + operator.isOneOperand());
+        LOGGER.debug("    Token: " + token + ", AttributeOperator: true");
+        LOGGER.debug("    AttributeOperator is one-operand: " + operator.isOneOperand());
         if(i > 0) {
           tokens.set(i, tokens.get(i - 1));
           tokens.set(i - 1, operator.name());
         }
       } catch(IllegalArgumentException e) {
-        LOGGER.info("    Token: " + token + ", AttributeOperator: false");
+        LOGGER.debug("    Token: " + token + ", AttributeOperator: false");
       }
     }
     logTokens(tokens);
