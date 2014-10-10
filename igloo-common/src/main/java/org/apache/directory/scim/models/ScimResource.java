@@ -23,6 +23,8 @@ import org.codehaus.jackson.map.AnnotationIntrospector;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.introspect.JacksonAnnotationIntrospector;
 import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author stevemoyer
@@ -30,6 +32,8 @@ import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
  */
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public abstract class ScimResource {
+  
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScimResource.class);
   
   private Map<String, ScimExtension> extensions = new HashMap<String, ScimExtension>();
   
@@ -87,15 +91,15 @@ public abstract class ScimResource {
   
   @JsonAnySetter
   public void setExtensions(String key, Object value) {
-    System.out.println("Found a ScimExtension");
-    System.out.println("Extension's URN: " + key);
-    System.out.println("Extension's string representation: " + value);
+    LOGGER.debug("Found a ScimExtension");
+    LOGGER.debug("Extension's URN: " + key);
+    LOGGER.debug("Extension's string representation: " + value);
     
     Class<? extends ScimResource> resourceClass = getClass();
-    System.out.println("Resource class: " + resourceClass.getSimpleName());
+    LOGGER.debug("Resource class: " + resourceClass.getSimpleName());
     
     Class<? extends ScimExtension> extensionClass = ScimExtensionRegistry.getInstance().getExtensionClass(resourceClass, key);
-    System.out.println("Extension class: " + extensionClass.getSimpleName());
+    LOGGER.debug("Extension class: " + extensionClass.getSimpleName());
     
     ObjectMapper mapper = new ObjectMapper();
     AnnotationIntrospector jaxbIntrospector = new JaxbAnnotationIntrospector();
@@ -105,7 +109,7 @@ public abstract class ScimResource {
     
     ScimExtension extension = mapper.convertValue(value, extensionClass);
     if(extension != null) {
-      System.out.println("    ***** Added extension to the resource *****");
+      LOGGER.debug("    ***** Added extension to the resource *****");
       extensions.put(key, extension);
     }
   }
