@@ -3,13 +3,19 @@ package org.apache.directory.scim.models;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
+import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.directory.scim.exceptions.ScimException;
 
 public abstract class MultiValuedAttribute {
 
+  @XmlElement(name = "display")
   private String display;
+  
+  @XmlElement(name = "operation")
   private String operation;
+  
+  @XmlElement(name = "primary")
   private boolean primary = false;
 
   public static final String MULTIPLE_PRIMARIES_ERROR = "Multiple entries were flagged as primary.  Only on primary is allowed per attribute";

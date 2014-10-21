@@ -1,8 +1,11 @@
 package org.apache.directory.scim.models;
 
+import javax.xml.bind.annotation.XmlElement;
+
 
 public abstract class TypedMultiValuedAttribute<T extends ScimType> extends MultiValuedAttribute {
 
+  @XmlElement(name = "type")
   private T type;
 
   /**
