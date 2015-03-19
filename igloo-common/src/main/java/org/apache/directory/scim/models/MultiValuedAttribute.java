@@ -3,10 +3,13 @@ package org.apache.directory.scim.models;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.directory.scim.exceptions.ScimException;
 
+@XmlAccessorType(XmlAccessType.NONE)
 public abstract class MultiValuedAttribute {
 
   @XmlElement(name = "display")
