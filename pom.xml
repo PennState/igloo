@@ -99,7 +99,7 @@
   </build>
 
   <scm>
-  	<connection>scm:git:ssh://git@ci.psu.edu/igloo.git</connection>
-  	<developerConnection>scm:git:ssh://git@ci.psu.edu/igloo.git</developerConnection>
+  	<connection>scm:git:ssh://git@github.com/PennState/igloo.git</connection>
+  	<developerConnection>scm:git:ssh://git@github.com/PennState/igloo.git</developerConnection>
   </scm>
 </project>
