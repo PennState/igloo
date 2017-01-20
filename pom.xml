@@ -68,7 +68,6 @@
 			<version>${slf4j.log4j12.version}</version>
 		</dependency>
 
-<<<<<<< HEAD
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -120,11 +119,4 @@
 		<connection>scm:git:ssh://git@github.com/PennState/igloo.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/PennState/igloo.git</developerConnection>
 	</scm>
-=======
-  <scm>
-  	<connection>scm:git:ssh://git@github.com/PennState/igloo.git</connection>
-  	<developerConnection>scm:git:ssh://git@github.com/PennState/igloo.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
->>>>>>> 5af445befa09c7d19c4b7c922b52d341a17a7b8e
 </project>
