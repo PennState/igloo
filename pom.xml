@@ -22,7 +22,7 @@
   <groupId>org.apache.directory.scim</groupId>
   <artifactId>igloo</artifactId>
   <packaging>pom</packaging>
-  <version>0.10-SNAPSHOT</version>
+  <version>0.10</version>
   <name>Apache Directory SCIM</name>
   
 	<properties>
@@ -118,5 +118,6 @@
 	<scm>
 		<connection>scm:git:ssh://git@github.com/PennState/igloo.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/PennState/igloo.git</developerConnection>
-	</scm>
+	  <tag>IGLOO-0.10</tag>
+  </scm>
 </project>
