@@ -9,8 +9,8 @@ this implementation is not compliant
 A new project that encompassed what we'd learned was started once the
 specification was complete which is under active development and will
 become part of the [Apache Directory](http://directory.apache.org) project.
-Please consider using [SCIMple Identity] for Java-based SCIM servers and
-clients.
+Please consider using [SCIMple Identity](https://github.com/PennState/SCIMple-Identity)
+for Java-based SCIM servers and clients.
 
 This project is currently being used internally but will be deleted when
 that application is deprecated - at that point this repository will be
