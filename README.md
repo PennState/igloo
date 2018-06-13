@@ -1,13 +1,18 @@
-Igloo
-=====
+Igloo - Deprecated
+==================
 
-A Java implementation of the Simple Cross-domain Identity Management (SCIM)
-v2.0 specification at http://www.simplecloud.info/ and slated to be released
-as an IETF specification.
+This project was originally a Java implementation of the Simple Cross-domain
+Identity Management (SCIM) v2.0 specification at http://www.simplecloud.info/
+during the period when the IETF specification was being created.  As such,
+this implementation is not compliant
 
-This project was originally forked from the eSCIMo project under development
-by the Apache Directory team and may be merged back into that project in the
-future.  See http://directory.apache.org/escimo/ for more details.  The
-system currently provides POST, GET and PUT functionality for the SCIM
-User resource and allows extensions to be created and registered.
+A new project that encompassed what we'd learned was started once the
+specification was complete which is under active development and will
+become part of the [Apache Directory](http://directory.apache.org) project.
+Please consider using [SCIMple Identity] for Java-based SCIM servers and
+clients.
+
+This project is currently being used internally but will be deleted when
+that application is deprecated - at that point this repository will be
+deleted.
 
